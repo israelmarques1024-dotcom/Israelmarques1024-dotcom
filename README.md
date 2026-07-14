@@ -53,6 +53,22 @@ Apaixonado por programação e sempre buscando aprender coisas novas.
 
 ---
 
+## 🌐 Sites online
+
+<p align="center">
+  <a href="https://kerneltermux.vercel.app">
+    <img src="https://img.shields.io/badge/Karnel%20Termux%20Docs-kerneltermux.vercel.app-0078D4?style=for-the-badge&logo=vercel" alt="Karnel Termux">
+  </a>
+  <a href="https://projeto-login-capivara-tech.vercel.app">
+    <img src="https://img.shields.io/badge/Login%20Capivara%20Tech-projeto--login--capivara--tech.vercel.app-339933?style=for-the-badge&logo=vercel" alt="Login Capivara Tech">
+  </a>
+  <a href="https://roubador-de-dados.vercel.app">
+    <img src="https://img.shields.io/badge/Roubador%20de%20Dados-roubador--de--dados.vercel.app-E34F26?style=for-the-badge&logo=vercel" alt="Roubador de Dados">
+  </a>
+</p>
+
+---
+
 ## 📊 GitHub Stats
 
 <p align="center">
