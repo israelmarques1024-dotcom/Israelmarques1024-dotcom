@@ -1,7 +1,7 @@
 # Olá 👋, eu sou o Israel Marques
 
 <div align="center">
-<img src="[https://capsule-render.vercel.app/render?type=waving&color=auto&height=200&section=header&text=Fullstack%20Developer%20In%20Training&fontSize=40&animation=fadeIn](https://capsule-render.vercel.app/render?type=waving&color=auto&height=200&section=header&text=Fullstack%20Developer%20In%20Training&fontSize=40&animation=fadeIn)" width="100%" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=auto&height=200&section=header&text=Fullstack%20Developer%20In%20Training&fontSize=40&animation=fadeIn" width="100%" />
 </div>
 
 🚀 **Desenvolvedor em formação | JavaScript & Node.js**  
