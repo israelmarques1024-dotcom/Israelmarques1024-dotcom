@@ -4,21 +4,20 @@
 <img src="https://capsule-render.vercel.app/api?type=waving&color=auto&height=200&section=header&text=Fullstack%20Developer%20In%20Training&fontSize=40&animation=fadeIn" width="100%" />
 </div>
 
+<p align="center">
+  <a href="https://kerneltermux.vercel.app">
+    <img src="https://img.shields.io/badge/Site-kerneltermux.vercel.app-0078D4?style=for-the-badge" alt="Website">
+  </a>
+  <a href="https://github.com/israelmarques1024-dotcom">
+    <img src="https://img.shields.io/badge/GitHub-israelmarques1024--dotcom-181717?style=for-the-badge&logo=github" />
+  </a>
+</p>
+
 🚀 **Desenvolvedor em formação | JavaScript & Node.js**  
 🇧🇷 Brasil · 12 anos
 
 Tenho 12 anos e já estou construindo projetos reais com back-end, banco de dados e autenticação.  
 Apaixonado por programação e sempre buscando aprender coisas novas.
-
----
-
-## 🌐 Onde me encontrar
-
-<p align="left">
-  <a href="https://github.com/israelmarques1024-dotcom">
-    <img src="https://img.shields.io/badge/GitHub-israelmarques1024--dotcom-181717?style=for-the-badge&logo=github" />
-  </a>
-</p>
 
 ---
 
@@ -50,15 +49,34 @@ Apaixonado por programação e sempre buscando aprender coisas novas.
 ### Ferramentas
 
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
-![VSCode](https://img.shields.io/badge/VS%20Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white)
+![VS Code](https://img.shields.io/badge/VS%20Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white)
 
 ---
 
 ## 📊 GitHub Stats
 
-<p align="left">
-  <img height="170" src="https://github-readme-stats.vercel.app/api?username=israelmarques1024-dotcom&show_icons=true&theme=tokyonight&count_private=true" />
+<p align="center">
+  <img height="170" src="https://github-readme-stats.vercel.app/api?username=israelmarques1024-dotcom&show_icons=true&theme=tokyonight&count_private=true&include_all_commits=true" />
   <img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=israelmarques1024-dotcom&layout=compact&theme=tokyonight" />
+</p>
+
+---
+
+## 📌 Projetos em destaque
+
+<p align="center">
+  <a href="https://github.com/israelmarques1024-dotcom/karnel-termux">
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=israelmarques1024-dotcom&repo=karnel-termux&theme=tokyonight" />
+  </a>
+  <a href="https://github.com/israelmarques1024-dotcom/karnel-termux-site">
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=israelmarques1024-dotcom&repo=karnel-termux-site&theme=tokyonight" />
+  </a>
+  <a href="https://github.com/israelmarques1024-dotcom/karnel-termux-desktop-cli">
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=israelmarques1024-dotcom&repo=karnel-termux-desktop-cli&theme=tokyonight" />
+  </a>
+  <a href="https://github.com/israelmarques1024-dotcom/projeto-login-capivara-tech">
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=israelmarques1024-dotcom&repo=projeto-login-capivara-tech&theme=tokyonight" />
+  </a>
 </p>
 
 ---
