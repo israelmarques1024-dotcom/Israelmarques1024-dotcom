@@ -1,0 +1,25 @@
+name: Update README cards
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/grs.yml
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate GitHub stats card
+        uses: readme
