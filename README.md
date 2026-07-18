@@ -82,16 +82,16 @@ Apaixonado por programação e sempre buscando aprender coisas novas.
 
 <p align="center">
   <a href="https://github.com/israelmarques1024-dotcom/karnel-termux">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=israelmarques1024-dotcom&repo=karnel-termux&theme=tokyonight" />
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=israelmarques1024-dotcom&repo=karnel-termux&theme=tokyonight" alt="karnel-termux">
   </a>
   <a href="https://github.com/israelmarques1024-dotcom/karnel-termux-site">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=israelmarques1024-dotcom&repo=karnel-termux-site&theme=tokyonight" />
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=israelmarques1024-dotcom&repo=karnel-termux-site&theme=tokyonight" alt="karnel-termux-site">
   </a>
   <a href="https://github.com/israelmarques1024-dotcom/karnel-termux-desktop-cli">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=israelmarques1024-dotcom&repo=karnel-termux-desktop-cli&theme=tokyonight" />
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=israelmarques1024-dotcom&repo=karnel-termux-desktop-cli&theme=tokyonight" alt="karnel-termux-desktop-cli">
   </a>
   <a href="https://github.com/israelmarques1024-dotcom/projeto-login-capivara-tech">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=israelmarques1024-dotcom&repo=projeto-login-capivara-tech&theme=tokyonight" />
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=israelmarques1024-dotcom&repo=projeto-login-capivara-tech&theme=tokyonight" alt="projeto-login-capivara-tech">
   </a>
 </p>
 
