@@ -5,7 +5,7 @@
 </div>
 
 <p align="center">
-  <a href="https://vercel.app">
+  <a href="https://kerneltermux.vercel.app">
     <img src="https://shields.io" alt="Website">
   </a>
   <a href="https://github.com">
@@ -59,13 +59,13 @@ Apaixonado por programação e sempre buscando aprender coisas novas.
 ## 🌐 Sites online
 
 <p align="center">
-  <a href="https://vercel.app">
+  <a href="https://kerneltermux.vercel.app">
     <img src="https://shields.io" alt="Karnel Termux">
   </a>
-  <a href="https://vercel.app">
+  <a href="https://projeto-login-capivara-tech.vercel.app">
     <img src="https://shields.io" alt="Login Capivara Tech">
   </a>
-  <a href="https://vercel.app">
+  <a href="https://roubador-de-dados.vercel.app">
     <img src="https://shields.io" alt="Roubador de Dados">
   </a>
 </p>
