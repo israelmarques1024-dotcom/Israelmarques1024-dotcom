@@ -110,4 +110,3 @@ Apaixonado por programação e sempre buscando aprender coisas novas.
 <p align="center">
   <img src="https://glitch.me" alt="Visitor Counter" />
 </p>
-
