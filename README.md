@@ -38,21 +38,18 @@ Apaixonado por programação e sempre buscando aprender coisas novas.
 ## 🛠️ Tech Stack
 
 ### Frontend
-
-![HTML](https://shields.io)
-![CSS](https://shields.io)
-![JavaScript](https://shields.io)
+* ![HTML](https://shields.io)
+* ![CSS](https://shields.io)
+* ![JavaScript](https://shields.io)
 
 ### Backend
-
-![Node.js](https://shields.io)
-![Express](https://shields.io)
-![SQLite](https://shields.io)
+* ![Node.js](https://shields.io)
+* ![Express](https://shields.io)
+* ![SQLite](https://shields.io)
 
 ### Ferramentas
-
-![Git](https://shields.io)
-![VS Code](https://shields.io)
+* ![Git](https://shields.io)
+* ![VS Code](https://shields.io)
 
 ---
 
@@ -113,3 +110,4 @@ Apaixonado por programação e sempre buscando aprender coisas novas.
 <p align="center">
   <img src="https://glitch.me" alt="Visitor Counter" />
 </p>
+
