@@ -1,175 +1,108 @@
+# Olá 👋, eu sou o Israel Marques
+
 <div align="center">
+<img src="https://capsule-render.vercel.app/api?type=waving&color=auto&height=200&section=header&text=Fullstack%20Developer%20In%20Training&fontSize=40&animation=fadeIn" width="100%" />
+</div>
 
-<img
-  width="100%"
-  src="https://capsule-render.vercel.app/api?type=waving&height=230&color=0:0D1117,50:0969DA,100:00FF88&text=Israel%20Marques&fontColor=FFFFFF&fontSize=44&fontAlignY=36&desc=Desenvolvedor%20Full%20Stack%20em%20forma%C3%A7%C3%A3o&descAlignY=57&descSize=18"
-  alt="Banner de Israel Marques"
-/>
-
-<img
-  src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=25&pause=1000&color=00FF88&center=true&vCenter=true&width=760&lines=Desenvolvedor+em+constante+evolu%C3%A7%C3%A3o;Criando+ideias+com+c%C3%B3digo;Explorando+tecnologia+e+seguran%C3%A7a;Construindo+para+Web%2C+Desktop+e+Termux"
-  alt="Apresentação animada de Israel Marques"
-/>
-
-# Olá, eu sou o Israel Marques 👋
-
-### 💻 Desenvolvedor em constante evolução 🚀
-
-*"Transformando ideias em código."*
-
-<p>
-  <a href="https://kerneltermux.vercel.app">
-    <img src="https://img.shields.io/badge/Website-Karnel%20Termux-0969DA?style=for-the-badge&logo=vercel&logoColor=white" alt="Website do Karnel Termux" />
+<p align="center">
+  <a href="https://karneltermux.vercel.app">
+    <img src="https://img.shields.io/badge/Site-karneltermux.vercel.app-0078D4?style=for-the-badge" alt="Website">
   </a>
   <a href="https://github.com/israelmarques1024-dotcom">
-    <img src="https://img.shields.io/badge/GitHub-Perfil-181717?style=for-the-badge&logo=github&logoColor=white" alt="Perfil no GitHub" />
-  </a>
-  <a href="mailto:israelmarques1024@gmail.com">
-    <img src="https://img.shields.io/badge/Email-Contato-EA4335?style=for-the-badge&logo=gmail&logoColor=white" alt="Contato por e-mail" />
+    <img src="https://img.shields.io/badge/GitHub-israelmarques1024--dotcom-181717?style=for-the-badge&logo=github" />
   </a>
 </p>
 
-</div>
+🚀 **Desenvolvedor em formação | JavaScript & Node.js**  
+🇧🇷 Brasil · 12 anos
+
+Tenho 12 anos e já estou construindo projetos reais com back-end, banco de dados e autenticação.  
+Apaixonado por programação e sempre buscando aprender coisas novas.
 
 ---
 
-## 👨‍💻 Sobre mim
+## 🧠 O que estou aprendendo / fazendo
 
-Tenho **12 anos** e estudo desenvolvimento web, back-end, bancos de dados, aplicações desktop e ferramentas para terminal.
-
-Gosto de construir projetos reais para entender como cada parte de um sistema funciona. Meu objetivo não é apenas fazer o código rodar: quero compreender a arquitetura, encontrar erros, melhorar a segurança e organizar projetos de forma profissional.
-
-Atualmente, trabalho principalmente com **JavaScript**, **Node.js**, **Express** e **SQLite**, além de estudar **Electron**, Python, Linux, Termux, automação e ferramentas CLI.
-
----
-
-## 🧠 O que estou aprendendo
-
-- Desenvolvimento de interfaces com **HTML, CSS e JavaScript**
-- Criação de APIs e servidores com **Node.js e Express**
-- Bancos de dados relacionais com **SQLite**
-- Login, autenticação, sessões e controle de acesso
-- Aplicações desktop modernas com **Electron**
-- Programação e automação com **Python**
-- Git, GitHub e organização profissional de projetos
-- Linux, Termux, Bash e ferramentas de terminal
-- Arquitetura, segurança e qualidade de código
+- 🌐 Construindo páginas web com **HTML & CSS**
+- ⚡ Adicionando interatividade com **JavaScript**
+- 🔧 Criando APIs e servidores com **Node.js + Express**
+- 🗄️ Gerenciando dados com **SQLite3**
+- 🔐 Implementando sistemas de **login e autenticação**
+- 🚀 Evoluindo um projeto por vez!
 
 ---
 
-## 🛠️ Tecnologias e ferramentas
+## 🛠️ Tech Stack
 
-<div align="center">
+### Frontend
 
-<img
-  src="https://skillicons.dev/icons?i=python,html,css,js,nodejs,electron,linux,git,github,docker,vscode,bash"
-  alt="Tecnologias e ferramentas utilizadas por Israel Marques"
-/>
+![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-FFD43B?style=for-the-badge&logo=javascript&logoColor=000)
 
-</div>
+### Backend
 
----
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
 
-## 🚀 Projetos em destaque
+### Ferramentas
 
-### Karnel Termux
-
-Ecossistema de produtividade para Termux que facilita a instalação, configuração e utilização de ferramentas de desenvolvimento, inteligência artificial, automação e linha de comando.
-
-[![Repositório](https://img.shields.io/badge/Ver%20repositório-181717?style=for-the-badge&logo=github)](https://github.com/israelmarques1024-dotcom/karnel-termux)
-[![Website](https://img.shields.io/badge/Acessar%20site-000000?style=for-the-badge&logo=vercel)](https://kerneltermux.vercel.app)
-
-### Site do Karnel Termux
-
-Código-fonte do site e da documentação online do Karnel Termux, criado para apresentar o projeto e ajudar novos usuários.
-
-[![Repositório](https://img.shields.io/badge/Ver%20repositório-181717?style=for-the-badge&logo=github)](https://github.com/israelmarques1024-dotcom/karnel-termux-site)
-[![Website](https://img.shields.io/badge/Acessar%20site-000000?style=for-the-badge&logo=vercel)](https://kerneltermux.vercel.app)
-
-### Kadris
-
-IDE desktop moderna em desenvolvimento com **Electron**, planejada para reunir edição de código, terminal integrado, automação e agentes de inteligência artificial em uma experiência profissional.
-
-### Projeto Login Capivara Tech
-
-Sistema educacional criado para praticar interface, back-end, banco de dados, login, autenticação e organização de uma aplicação completa.
-
-[![Repositório](https://img.shields.io/badge/Ver%20repositório-181717?style=for-the-badge&logo=github)](https://github.com/israelmarques1024-dotcom/projeto-login-capivara-tech)
-[![Demonstração](https://img.shields.io/badge/Abrir%20demonstração-000000?style=for-the-badge&logo=vercel)](https://projeto-login-capivara-tech.vercel.app)
-
-### Roubador de Dados Simples
-
-Meu primeiro projeto com **HTML, CSS e JavaScript**. Apesar do nome, ele não rouba nem envia informações: é apenas uma tela de login educacional que exibe os dados no console do navegador, sem back-end e sem banco de dados.
-
-[![Repositório](https://img.shields.io/badge/Ver%20repositório-181717?style=for-the-badge&logo=github)](https://github.com/israelmarques1024-dotcom/Roubador-de-dados-simples-)
-[![Demonstração](https://img.shields.io/badge/Abrir%20demonstração-000000?style=for-the-badge&logo=vercel)](https://roubador-de-dados.vercel.app)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![VS Code](https://img.shields.io/badge/VS%20Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white)
 
 ---
 
-## 📊 Atividade no GitHub
+## 🌐 Sites online
 
-<div align="center">
-
-<img
-  src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=israelmarques1024-dotcom&theme=github_dark"
-  alt="Resumo da atividade de Israel Marques no GitHub"
-/>
-
-<br />
-
-<img
-  height="170"
-  src="https://github-profile-summary-cards.vercel.app/api/cards/repos-per-language?username=israelmarques1024-dotcom&theme=github_dark"
-  alt="Repositórios por linguagem"
-/>
-<img
-  height="170"
-  src="https://github-profile-summary-cards.vercel.app/api/cards/most-commit-language?username=israelmarques1024-dotcom&theme=github_dark"
-  alt="Linguagens com mais commits"
-/>
-
-</div>
+<p align="center">
+  <a href="https://karneltermux.vercel.app">
+    <img src="https://img.shields.io/badge/Karnel%20Termux%20Docs-karneltermux.vercel.app-0078D4?style=for-the-badge&logo=vercel" alt="Karnel Termux">
+  </a>
+  <a href="https://projeto-login-capivara-tech.vercel.app">
+    <img src="https://img.shields.io/badge/Login%20Capivara%20Tech-projeto--login--capivara--tech.vercel.app-339933?style=for-the-badge&logo=vercel" alt="Login Capivara Tech">
+  </a>
+  <a href="https://roubador-de-dados.vercel.app">
+    <img src="https://img.shields.io/badge/Roubador%20de%20Dados-roubador--de--dados.vercel.app-E34F26?style=for-the-badge&logo=vercel" alt="Roubador de Dados">
+  </a>
+</p>
 
 ---
 
-## 🎯 Objetivos atuais
+## 📊 GitHub Stats
 
-- Evoluir minhas habilidades em **JavaScript**, **Node.js** e **Python**
-- Criar aplicações desktop profissionais com **Electron**
-- Expandir o ecossistema do **Karnel Termux**
-- Desenvolver a IDE **Kadris**
-- Contribuir com projetos open source
-- Criar ferramentas úteis para desenvolvedores e para a comunidade
+<p align="center">
+  <img height="170" src="https://github-readme-stats.vercel.app/api?username=israelmarques1024-dotcom&show_icons=true&theme=tokyonight&count_private=true&include_all_commits=true" />
+  <img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=israelmarques1024-dotcom&layout=compact&theme=tokyonight" />
+</p>
 
 ---
 
-## 💡 Minha filosofia
+## 📌 Projetos em destaque
 
-> **Aprender antes de copiar. Entender antes de automatizar. Testar antes de publicar. Melhorar um projeto por vez.**
-
-> A programação não tem idade — precisa de curiosidade, prática, disciplina e vontade de aprender.
+<p align="center">
+  <a href="https://github.com/israelmarques1024-dotcom/karnel-termux">
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=israelmarques1024-dotcom&repo=karnel-termux&theme=tokyonight" />
+  </a>
+  <a href="https://github.com/israelmarques1024-dotcom/karnel-termux-site">
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=israelmarques1024-dotcom&repo=karnel-termux-site&theme=tokyonight" />
+  </a>
+  <a href="https://github.com/israelmarques1024-dotcom/karnel-termux-desktop-cli">
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=israelmarques1024-dotcom&repo=karnel-termux-desktop-cli&theme=tokyonight" />
+  </a>
+  <a href="https://github.com/israelmarques1024-dotcom/projeto-login-capivara-tech">
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=israelmarques1024-dotcom&repo=projeto-login-capivara-tech&theme=tokyonight" />
+  </a>
+</p>
 
 ---
 
-<div align="center">
+## 🚀 Filosofia
 
-⭐ Se algum projeto for útil, considere deixar uma estrela.
+> _"Com 12 anos já construí meu primeiro sistema com banco de dados.  
+> A programação não tem idade — só precisa de curiosidade e vontade de aprender."_
 
-🤝 Estou sempre aberto a aprender, colaborar e evoluir com a comunidade.
+---
 
-<br />
-
-<img
-  src="https://komarev.com/ghpvc/?username=israelmarques1024-dotcom&label=Visualiza%C3%A7%C3%B5es%20do%20perfil&color=00b873&style=for-the-badge"
-  alt="Contador de visualizações do perfil"
-/>
-
-<br /><br />
-
-<img
-  width="100%"
-  src="https://capsule-render.vercel.app/api?type=waving&height=120&section=footer&color=0:00FF88,50:0969DA,100:0D1117"
-  alt="Rodapé decorativo"
-/>
-
-</div>
+⭐ Se curtir algum projeto, deixa uma estrela!  
+🤝 Aberto a aprender, colaborar e crescer junto com a comunidade
