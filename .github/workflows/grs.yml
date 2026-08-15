@@ -1,25 +1,32 @@
-name: Update README cards
+name: Validate profile README
 
 on:
   push:
     branches:
       - main
     paths:
+      - README.md
       - .github/workflows/grs.yml
-  schedule:
-    - cron: "0 3 * * *"
+  pull_request:
+    paths:
+      - README.md
+      - .github/workflows/grs.yml
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Generate GitHub stats card
-        uses: readme
+      - name: Check README exists and is not empty
+        shell: bash
+        run: |
+          test -s README.md
+          grep -q "Israel Marques" README.md
+          grep -q "github-readme-stats.vercel.app" README.md
