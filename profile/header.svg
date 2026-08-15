@@ -1,26 +1,42 @@
-<svg width="900" height="230" viewBox="0 0 900 230" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="900" height="250" viewBox="0 0 900 250" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="900" y2="230" gradientUnits="userSpaceOnUse">
+    <linearGradient id="bg" x1="35" y1="15" x2="865" y2="235" gradientUnits="userSpaceOnUse">
       <stop stop-color="#0D1117"/>
-      <stop offset="0.52" stop-color="#111827"/>
-      <stop offset="1" stop-color="#0D1117"/>
+      <stop offset="0.5" stop-color="#111827"/>
+      <stop offset="1" stop-color="#0B1020"/>
     </linearGradient>
-    <linearGradient id="accent" x1="135" y1="0" x2="745" y2="0" gradientUnits="userSpaceOnUse">
+    <linearGradient id="accent" x1="112" y1="0" x2="790" y2="0" gradientUnits="userSpaceOnUse">
       <stop stop-color="#58A6FF"/>
-      <stop offset="0.5" stop-color="#A371F7"/>
+      <stop offset="0.52" stop-color="#A371F7"/>
       <stop offset="1" stop-color="#39D353"/>
     </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="14"/>
+    </filter>
   </defs>
-  <rect width="900" height="230" rx="24" fill="url(#bg)"/>
-  <rect x="1" y="1" width="898" height="228" rx="23" stroke="#30363D" stroke-width="2"/>
-  <circle cx="92" cy="72" r="38" fill="#161B22" stroke="#30363D" stroke-width="2"/>
-  <text x="92" y="85" text-anchor="middle" fill="#58A6FF" font-family="Arial, Helvetica, sans-serif" font-size="38" font-weight="700">IM</text>
-  <text x="150" y="72" fill="#F0F6FC" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">Israel Marques</text>
-  <text x="150" y="104" fill="#8B949E" font-family="Arial, Helvetica, sans-serif" font-size="17">Fullstack Developer in Training</text>
-  <rect x="150" y="124" width="600" height="3" rx="1.5" fill="url(#accent)"/>
-  <text x="150" y="158" fill="#C9D1D9" font-family="Arial, Helvetica, sans-serif" font-size="16">JavaScript  •  Node.js  •  React  •  PostgreSQL  •  Linux  •  Termux</text>
-  <text x="150" y="190" fill="#8B949E" font-family="Arial, Helvetica, sans-serif" font-size="14">Construindo, testando, entendendo e evoluindo sistemas reais.</text>
-  <circle cx="800" cy="52" r="4" fill="#58A6FF" opacity="0.9"/>
-  <circle cx="830" cy="80" r="3" fill="#A371F7" opacity="0.8"/>
-  <circle cx="780" cy="105" r="3" fill="#39D353" opacity="0.8"/>
+
+  <rect width="900" height="250" rx="26" fill="url(#bg)"/>
+  <rect x="1" y="1" width="898" height="248" rx="25" stroke="#30363D" stroke-width="2"/>
+
+  <circle cx="795" cy="70" r="72" fill="#58A6FF" opacity="0.06" filter="url(#glow)"/>
+  <circle cx="842" cy="176" r="58" fill="#A371F7" opacity="0.06" filter="url(#glow)"/>
+
+  <circle cx="35" cy="28" r="5" fill="#FF5F56"/>
+  <circle cx="53" cy="28" r="5" fill="#FFBD2E"/>
+  <circle cx="71" cy="28" r="5" fill="#27C93F"/>
+  <text x="450" y="33" text-anchor="middle" fill="#6E7681" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12">israel@github:~/profile</text>
+
+  <rect x="54" y="62" width="72" height="72" rx="20" fill="#161B22" stroke="#30363D" stroke-width="2"/>
+  <text x="90" y="108" text-anchor="middle" fill="#58A6FF" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">IM</text>
+
+  <text x="154" y="88" fill="#F0F6FC" font-family="Arial, Helvetica, sans-serif" font-size="35" font-weight="700">Israel Marques</text>
+  <text x="154" y="119" fill="#8B949E" font-family="Arial, Helvetica, sans-serif" font-size="16">Fullstack Developer in Training · Brazil</text>
+  <rect x="154" y="137" width="575" height="3" rx="1.5" fill="url(#accent)"/>
+
+  <text x="54" y="176" fill="#39D353" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14">$</text>
+  <text x="72" y="176" fill="#C9D1D9" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14">build --with javascript node react postgres linux termux</text>
+  <text x="54" y="202" fill="#58A6FF" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14">›</text>
+  <text x="72" y="202" fill="#8B949E" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14">understand → architect → build → test → improve</text>
+
+  <text x="846" y="218" text-anchor="end" fill="#6E7681" font-family="Arial, Helvetica, sans-serif" font-size="11" letter-spacing="1.4">BUILD · LEARN · SHIP</text>
 </svg>
