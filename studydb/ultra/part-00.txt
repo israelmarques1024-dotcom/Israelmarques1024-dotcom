@@ -1,0 +1,81 @@
+// ==UserScript==
+// @name         Doritus Ultra Study
+// @namespace    doritus-ultra
+// @version      2.0.0
+// @description  Assistente de estudo offline com banco virtual de 100 milhões de registros.
+// @author       israelmarques1024-dotcom
+// @match        *://*/*
+// @grant        GM_registerMenuCommand
+// @grant        GM_setValue
+// @grant        GM_getValue
+// @updateURL    https://raw.githubusercontent.com/israelmarques1024-dotcom/Israelmarques1024-dotcom/main/studydb/doritus-ultra-study.user.js
+// @downloadURL  https://raw.githubusercontent.com/israelmarques1024-dotcom/Israelmarques1024-dotcom/main/studydb/doritus-ultra-study.user.js
+// @run-at       document-idle
+// ==/UserScript==
+
+(() => {
+'use strict';
+
+const APP = 'Doritus Ultra Study';
+const VERSION = '2.0.0';
+const TOTAL = 100_000_000;
+const PER_GRADE = 25_000_000;
+const GRADES = [6,7,8,9];
+const SUBJECTS = ['Matemática','Língua Portuguesa','Ciências','História','Geografia','Inglês','Programação'];
+
+const TOPICS = {
+6:{
+'Matemática':['Números naturais','Frações','Decimais','MDC e MMC','Razão e proporção','Porcentagem','Geometria','Estatística'],
+'Língua Portuguesa':['Interpretação','Classes gramaticais','Sujeito e predicado','Tempos verbais','Pontuação','Conotação e denotação'],
+'Ciências':['Células','Ecologia','Estados físicos','Misturas','Energia','Sistema Solar'],
+'História':['Antiguidade','Egito Antigo','Grécia Antiga','Roma Antiga'],
+'Geografia':['Cartografia','Paisagem','Relevo','Clima','Hidrografia','População'],
+'Inglês':['Verb to be','Simple present','Vocabulary','Numbers','Reading'],
+'Programação':['Lógica','HTML','CSS','JavaScript básico','Git básico']},
+7:{
+'Matemática':['Números inteiros','Frações','Porcentagem','Equações do 1º grau','Proporcionalidade','Geometria','Estatística','Probabilidade'],
+'Língua Portuguesa':['Interpretação','Advérbios','Conjunções','Figuras de linguagem','Tempos verbais','Vocativo'],
+'Ciências':['Células','Bactérias','Vírus','Ecologia','Força e gravidade','Velocidade média'],
+'História':['Renascimento','Reforma Protestante','Contrarreforma','Mercantilismo','Expansão marítima','Brasil Colonial'],
+'Geografia':['População','Urbanização','Migrações','Hidrografia','Recursos naturais','Setores da economia'],
+'Inglês':['Simple present','Simple past','Modal verbs','Vocabulary','Reading'],
+'Programação':['JavaScript','Arrays','HTML','CSS','Node.js','Express','SQL','Git']},
+8:{
+'Matemática':['Equações','Sistemas lineares','Expressões algébricas','Potências','Pitágoras','Plano cartesiano','Porcentagem','Estatística'],
+'Língua Portuguesa':['Interpretação','Orações','Conjunções','Coesão textual','Figuras de linguagem','Gêneros textuais'],
+'Ciências':['Corpo humano','Energia','Eletricidade','Química introdutória','Sistemas do corpo','Movimento'],
+'História':['Iluminismo','Revolução Industrial','Revolução Francesa','Independências','Brasil Império'],
+'Geografia':['Migrações','Economia','Industrialização','Globalização','População mundial','Urbanização'],
+'Inglês':['Simple past','Comparatives','Superlatives','Modal verbs','Reading'],
+'Programação':['JavaScript intermediário','DOM','Node.js','APIs','SQL','Git']},
+9:{
+'Matemática':['Equação do 2º grau','Função afim','Função quadrática','Radiciação','Pitágoras','Semelhança','Estatística','Probabilidade'],
+'Língua Portuguesa':['Interpretação','Sintaxe','Orações subordinadas','Argumentação','Figuras de linguagem','Coesão textual'],
+'Ciências':['Genética','Átomos','Química','Física','Ecologia','Evolução'],
+'História':['Primeira Guerra Mundial','Segunda Guerra Mundial','República no Brasil','Guerra Fria','Século XX'],
+'Geografia':['Globalização','Geopolítica','Clima','Economia mundial','Urbanização','População'],
+'Inglês':['Conditionals','Present perfect','Reading','Vocabulary','Writing'],
+'Programação':['JavaScript avançado','APIs','Backend','SQL','Git','Arquitetura web']}
+};
+
+const NAMES=['Ana','Bruno','Carla','Diego','Elisa','Felipe','Gabriela','Henrique','Isabela','João','Larissa','Marcos'];
+const PLACES=['biblioteca','laboratório','parque','museu','praça','quadra','auditório','feira de ciências'];
+const ACTIONS=['pesquisou','organizou','preparou','apresentou','escreveu','explicou','observou','construiu'];
+const PURPOSES=['aprender ciência','ajudar a turma','preparar um trabalho','divulgar um projeto','resolver um problema','incentivar a leitura'];
+
+const mix = (n,s=0) => {
+  let x = (Number(n) ^ s) >>> 0;
+  x ^= x >>> 16; x = Math.imul(x,0x7feb352d);
+  x ^= x >>> 15; x = Math.imul(x,0x846ca68b);
+  x ^= x >>> 16; return x >>> 0;
+};
+const pick=(a,n,s=0)=>a[mix(n,s)%a.length];
+const mod=(n,m,s=0)=>mix(n,s)%m;
+const fmt=n=>Number.isInteger(n)?String(n):String(Math.round(n*1000)/1000).replace('.',',');
+const gradeFor=id=>6+Math.floor(id/PER_GRADE);
+const local=id=>id%PER_GRADE;
+const subjectFor=id=>SUBJECTS[local(id)%SUBJECTS.length];
+const topicFor=(id,g,s)=>pick(TOPICS[g][s],id,0x1a2b3c);
+const diff=id=>['Fácil','Médio','Difícil'][mod(id,3,0x9988)];
+
+function rec(id,g,s,t,q
