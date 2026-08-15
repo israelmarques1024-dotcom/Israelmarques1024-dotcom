@@ -1,0 +1,18 @@
+{
+  "name": "Doritus Ultra Study",
+  "version": "2.0.0",
+  "virtualCapacity": 100000000,
+  "grades": [6, 7, 8, 9],
+  "subjects": ["Matemática", "Língua Portuguesa", "Ciências", "História", "Geografia", "Inglês", "Programação"],
+  "bundleSha256": "79c5ea733fb601009d38a8d1434abe8179419fba8ebb6e17b596c14db6be1ddd",
+  "parts": [
+    {"file":"part-00.txt","gitBlobSha":"d8493cf6e28faf6a8ac019b850638569d5e253b9","bytes":5163},
+    {"file":"part-01.txt","gitBlobSha":"7eca46eb2205cc655aa453b579008aaacc3f1ef2","bytes":5159},
+    {"file":"part-02.txt","gitBlobSha":"935306aa78e5ed769dba7e1413f7305e629baf0d","bytes":5178},
+    {"file":"part-03.txt","gitBlobSha":"d3e4cd5c78274b3931a41fc1f14190be7a729de9","bytes":5086},
+    {"file":"part-04.txt","gitBlobSha":"cbe14d4aba62997fa8744f36f4c0bcda01f7381a","bytes":4222}
+  ],
+  "mode": "study-manual",
+  "features": ["geração por ID", "filtro por série", "filtro por matéria", "dicas", "respostas", "explicações", "histórico local", "atualização automática"],
+  "note": "Banco virtual gerado sob demanda. Não materializa 100 milhões de linhas em disco."
+}
