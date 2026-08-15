@@ -1,0 +1,46 @@
+{
+  "version": "5.1.0",
+  "totalVirtualRecords": 100000000,
+  "grades": [6, 7, 8, 9],
+  "recordsPerGrade": 25000000,
+  "subjects": ["Matemática", "Língua Portuguesa", "Ciências", "História", "Geografia", "Inglês", "Programação"],
+  "topics": {
+    "6": {
+      "Matemática": ["Números naturais", "Frações", "Decimais", "MDC/MMC", "Área e perímetro"],
+      "Língua Portuguesa": ["Interpretação", "Classes gramaticais", "Sujeito e predicado", "Tempos verbais"],
+      "Ciências": ["Células", "Ecologia", "Estados físicos", "Sistema Solar"],
+      "História": ["Antiguidade", "Egito Antigo", "Grécia Antiga", "Roma Antiga"],
+      "Geografia": ["Cartografia", "Paisagem", "Relevo", "Hidrografia"],
+      "Inglês": ["Verb to be", "Simple present", "Vocabulary", "Reading"],
+      "Programação": ["Lógica", "HTML", "CSS", "JavaScript básico", "Git básico"]
+    },
+    "7": {
+      "Matemática": ["Números inteiros", "Frações", "Porcentagem", "Equações do 1º grau", "Proporcionalidade", "Geometria", "Estatística", "Probabilidade"],
+      "Língua Portuguesa": ["Interpretação", "Advérbios", "Conjunções", "Figuras de linguagem", "Tempos verbais"],
+      "Ciências": ["Células", "Bactérias", "Vírus", "Ecologia", "Força e gravidade", "Velocidade média"],
+      "História": ["Renascimento", "Reforma Protestante", "Contrarreforma", "Mercantilismo", "Expansão marítima", "Brasil Colonial"],
+      "Geografia": ["População", "Urbanização", "Migrações", "Hidrografia", "Recursos naturais"],
+      "Inglês": ["Simple present", "Simple past", "Modal verbs", "Vocabulary", "Reading"],
+      "Programação": ["JavaScript", "Arrays", "HTML", "CSS", "Node.js", "Express", "SQL", "Git"]
+    },
+    "8": {
+      "Matemática": ["Equações", "Sistemas lineares", "Expressões algébricas", "Potências", "Plano cartesiano", "Pitágoras", "Estatística"],
+      "Língua Portuguesa": ["Interpretação", "Orações", "Conjunções", "Coesão", "Figuras de linguagem"],
+      "Ciências": ["Corpo humano", "Energia", "Eletricidade", "Química introdutória"],
+      "História": ["Iluminismo", "Revolução Industrial", "Independências", "Revolução Francesa", "Brasil Império"],
+      "Geografia": ["Migrações", "Economia", "Industrialização", "Globalização"],
+      "Inglês": ["Simple past", "Comparatives", "Superlatives", "Modal verbs", "Reading"],
+      "Programação": ["JavaScript intermediário", "DOM", "Node.js", "APIs", "SQL", "Git"]
+    },
+    "9": {
+      "Matemática": ["Equação do 2º grau", "Função afim", "Função quadrática", "Pitágoras", "Radiciação", "Semelhança", "Estatística"],
+      "Língua Portuguesa": ["Interpretação", "Sintaxe", "Orações subordinadas", "Argumentação", "Coesão textual"],
+      "Ciências": ["Genética", "Átomos", "Química", "Física", "Ecologia", "Evolução"],
+      "História": ["Primeira Guerra Mundial", "Segunda Guerra Mundial", "República no Brasil", "Guerra Fria", "Século XX"],
+      "Geografia": ["Globalização", "Geopolítica", "Clima", "Economia mundial", "Urbanização"],
+      "Inglês": ["Conditionals", "Present perfect", "Reading", "Vocabulary", "Writing"],
+      "Programação": ["JavaScript avançado", "APIs", "Backend", "SQL", "Git", "Arquitetura web"]
+    }
+  },
+  "purpose": "Banco virtual de estudo original"
+}
