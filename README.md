@@ -6,6 +6,7 @@
 
 [![GitHub](https://img.shields.io/badge/GitHub-israelmarques1024--dotcom-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/israelmarques1024-dotcom)
 [![Karnel Termux](https://img.shields.io/badge/Karnel%20Termux-Website-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://karneltermux.vercel.app)
+[![Karnel NPM](https://img.shields.io/npm/v/karnel-termux?style=for-the-badge&logo=npm&label=karnel-termux)](https://www.npmjs.com/package/karnel-termux)
 
 **Construindo projetos reais, entendendo sistemas por dentro e transformando curiosidade em software.**
 
@@ -15,7 +16,7 @@
 
 ## 👨‍💻 Sobre mim
 
-Sou desenvolvedor fullstack em formação, com foco no ecossistema **JavaScript / Node.js** e interesse forte em sistemas, automação, Linux e ferramentas para desenvolvedores.
+Desenvolvedor fullstack em formação, focado no ecossistema **JavaScript / Node.js** e especialmente interessado em sistemas, automação, Linux e ferramentas para desenvolvedores.
 
 <table>
 <tr>
@@ -38,9 +39,9 @@ Sou desenvolvedor fullstack em formação, com foco no ecossistema **JavaScript 
 - construindo projetos reais
 - desmontando problemas complexos
 - testando hipóteses
-- corrigindo até entender a causa
+- buscando a causa raiz dos bugs
 - documentando o que aprendi
-- evitando apenas copiar soluções
+- entendendo antes de abstrair
 
 </td>
 </tr>
@@ -83,12 +84,10 @@ Sou desenvolvedor fullstack em formação, com foco no ecossistema **JavaScript 
 ## 📊 GitHub em números
 
 <div align="center">
-  <img height="190" src="./profile/stats.svg" alt="GitHub Stats" />
-  <img height="190" src="./profile/top-langs.svg" alt="Top Languages" />
-</div>
-
-<div align="center">
-  <sub>Cards gerados automaticamente e armazenados neste próprio repositório.</sub>
+  <img width="49%" src="./profile/stats.svg" alt="Estatísticas do GitHub de Israel Marques" />
+  <img width="49%" src="./profile/top-langs.svg" alt="Linguagens mais usadas por Israel Marques" />
+  <br/>
+  <sub>Cards atualizados automaticamente pelo GitHub Actions e armazenados neste repositório.</sub>
 </div>
 
 ---
@@ -98,10 +97,10 @@ Sou desenvolvedor fullstack em formação, com foco no ecossistema **JavaScript 
 <div align="center">
 
 <a href="https://github.com/israelmarques1024-dotcom/karnel-termux">
-  <img src="./profile/karnel-termux.svg" alt="Karnel Termux" />
+  <img width="49%" src="./profile/karnel-termux.svg" alt="Card do projeto Karnel Termux" />
 </a>
 <a href="https://github.com/israelmarques1024-dotcom/nearbit">
-  <img src="./profile/nearbit.svg" alt="Nearbit" />
+  <img width="49%" src="./profile/nearbit.svg" alt="Card do projeto Nearbit" />
 </a>
 
 </div>
@@ -114,10 +113,11 @@ Sou desenvolvedor fullstack em formação, com foco no ecossistema **JavaScript 
 
 Ecossistema de ferramentas para desenvolvimento no **Termux**, focado em instalação, automação e experiência de desenvolvimento no Android.
 
-**Explora:** CLI · automação · Linux · tooling · integração com ferramentas dev
+`CLI` · `automação` · `Linux` · `tooling` · `developer experience`
 
 [![Repo](https://img.shields.io/badge/Repository-181717?style=flat-square&logo=github)](https://github.com/israelmarques1024-dotcom/karnel-termux)
 [![Site](https://img.shields.io/badge/Website-000000?style=flat-square&logo=vercel)](https://karneltermux.vercel.app)
+[![npm](https://img.shields.io/npm/v/karnel-termux?style=flat-square&logo=npm)](https://www.npmjs.com/package/karnel-termux)
 
 </td>
 <td width="50%" valign="top">
@@ -126,7 +126,7 @@ Ecossistema de ferramentas para desenvolvimento no **Termux**, focado em instala
 
 Projeto de comunicação entre dispositivos, explorando mensageria, interfaces web/desktop e comunicação em rede.
 
-**Explora:** networking · mensagens · web · desktop · comunicação entre dispositivos
+`networking` · `mensageria` · `web` · `desktop` · `device communication`
 
 [![Repo](https://img.shields.io/badge/Repository-181717?style=flat-square&logo=github)](https://github.com/israelmarques1024-dotcom/nearbit)
 
@@ -136,18 +136,18 @@ Projeto de comunicação entre dispositivos, explorando mensageria, interfaces w
 
 ---
 
-## 🧭 O que estou explorando agora
+## 🧭 Em evolução
 
 ```text
 Backend & APIs       ██████████  foco alto
 Linux & Termux       ██████████  foco alto
+Automação / CLIs     █████████░  construindo
 Frontend / React     ████████░░  evoluindo
 Bancos de dados      ████████░░  evoluindo
 Arquitetura          ███████░░░  aprofundando
-Automação / CLIs     █████████░  construindo
 ```
 
-> Não são métricas de proficiência — representam apenas onde estou concentrando meus estudos e projetos atualmente.
+<sub>Essas barras representam foco atual de estudo e construção — não nível de proficiência.</sub>
 
 ---
 
@@ -161,23 +161,19 @@ Automação / CLIs     █████████░  construindo
 
 ---
 
-## 🔗 Links
+## 🔗 Onde me encontrar
 
 <div align="center">
 
 [![GitHub Profile](https://img.shields.io/badge/GitHub-Perfil-181717?style=for-the-badge&logo=github)](https://github.com/israelmarques1024-dotcom)
 [![Karnel Website](https://img.shields.io/badge/Karnel%20Termux-Site-000000?style=for-the-badge&logo=vercel)](https://karneltermux.vercel.app)
-[![Karnel Repo](https://img.shields.io/badge/Karnel%20Termux-Repo-181717?style=for-the-badge&logo=github)](https://github.com/israelmarques1024-dotcom/karnel-termux)
+[![Karnel Repository](https://img.shields.io/badge/Karnel%20Termux-Repo-181717?style=for-the-badge&logo=github)](https://github.com/israelmarques1024-dotcom/karnel-termux)
 [![Nearbit](https://img.shields.io/badge/Nearbit-Repo-181717?style=for-the-badge&logo=github)](https://github.com/israelmarques1024-dotcom/nearbit)
 
-</div>
+<br/><br/>
 
----
+<img src="./profile/footer.svg" width="100%" alt="Curiosidade, conhecimento e sistemas que funcionam" />
 
-<div align="center">
-
-### Curiosidade → conhecimento → sistemas que funcionam.
-
-**Se algum projeto for útil, uma ⭐ ajuda bastante.**
+**Se algum projeto for útil para você, uma ⭐ ajuda bastante.**
 
 </div>
