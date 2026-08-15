@@ -2,38 +2,33 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CACTUS_DIR="$ROOT/cactus"
-MODEL="${CAPITRITUS_MODEL:-Qwen/Qwen3-0.6B}"
+LLAMA_DIR="$ROOT/llama.cpp"
+VENV="$ROOT/.venv"
 
-echo "[1/5] Instalando dependencias do sistema..."
+echo "[1/4] Instalando dependencias do sistema..."
 sudo apt-get update
-sudo apt-get install -y python3.12 python3.12-venv python3-pip cmake build-essential libcurl4-openssl-dev git curl
+sudo apt-get install -y python3 python3-venv python3-pip cmake build-essential git curl libcurl4-openssl-dev
 
-if [ ! -d "$CACTUS_DIR/.git" ]; then
-  echo "[2/5] Clonando Cactus..."
-  git clone --depth 1 https://github.com/cactus-compute/cactus "$CACTUS_DIR"
+if [ ! -d "$LLAMA_DIR/.git" ]; then
+  echo "[2/4] Clonando llama.cpp..."
+  git clone --depth 1 https://github.com/ggml-org/llama.cpp "$LLAMA_DIR"
 else
-  echo "[2/5] Cactus ja existe; atualizando..."
-  git -C "$CACTUS_DIR" pull --ff-only || true
+  echo "[2/4] llama.cpp ja existe; atualizando..."
+  git -C "$LLAMA_DIR" pull --ff-only || true
 fi
 
-cd "$CACTUS_DIR"
-echo "[3/5] Preparando Cactus..."
-# O setup oficial cria/ativa o ambiente Python do Cactus.
-source ./setup
-cactus build --python
+echo "[3/4] Compilando llama-server para $(uname -m)..."
+cmake -S "$LLAMA_DIR" -B "$LLAMA_DIR/build" -DCMAKE_BUILD_TYPE=Release
+cmake --build "$LLAMA_DIR/build" --config Release -j"$(nproc)" --target llama-server
 
-# FastAPI deve ficar no mesmo ambiente Python usado pelo Cactus.
-echo "[4/5] Instalando API..."
-python -m pip install --upgrade pip
-python -m pip install 'fastapi>=0.115' 'uvicorn[standard]>=0.34' 'pydantic>=2.10'
-
-echo "[5/5] Baixando modelo: $MODEL"
-cactus download "$MODEL"
+echo "[4/4] Preparando API Python..."
+python3 -m venv "$VENV"
+"$VENV/bin/python" -m pip install --upgrade pip
+"$VENV/bin/python" -m pip install 'fastapi>=0.115' 'uvicorn[standard]>=0.34' 'pydantic>=2.10'
 
 echo
-echo "Pronto. Para iniciar:"
+echo "Pronto. O modelo sera baixado automaticamente na primeira inicializacao."
+echo "Modelo padrao: Qwen/Qwen3-0.6B-GGUF:Q8_0 (~639 MB)"
+echo "Agora rode:"
 echo "  cd $ROOT"
 echo "  ./start.sh"
-echo
-echo "Depois abra a aba PORTS do Codespaces e torne a porta 8000 PUBLICA."
