@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Doritus Ultra Study
 // @namespace    doritus-ultra
-// @version      2.2.0
-// @description  Lê questões da página, consulta banco local e destaca sugestões automaticamente.
+// @version      2.4.0
+// @description  Assistente conceitual de estudo para leitura e destaque de sugestões.
 // @author       israelmarques1024-dotcom
 // @match        *://*/*
 // @grant        GM_xmlhttpRequest
@@ -17,22 +17,36 @@
 
 (async()=>{
 'use strict';
-const BASE='https://raw.githubusercontent.com/israelmarques1024-dotcom/Israelmarques1024-dotcom/main/studydb/ultra-v22/';
+const BASE='https://raw.githubusercontent.com/israelmarques1024-dotcom/Israelmarques1024-dotcom/main/studydb/ultra-v24/';
 const PARTS=5;
-const EXPECTED='fbcc5311f9416d3dfce55154597f2c5c19d5f292f5cf47645f74e6fcf2da0c3e';
-const CACHE='doritus_ultra_bundle_v22';
-const get=url=>new Promise((resolve,reject)=>GM_xmlhttpRequest({method:'GET',url,onload:r=>r.status>=200&&r.status<300?resolve(r.responseText):reject(new Error('HTTP '+r.status)),onerror:()=>reject(new Error('Falha de rede'))}));
-const sha=async text=>{const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text));return [...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,'0')).join('')};
+const EXPECTED='a94dfab9516da0e3c12f415129cb3129d136dbd3714aa67738aea84c482db6a6';
+const CACHE='doritus_ultra_bundle_v24';
+const get=url=>new Promise((resolve,reject)=>GM_xmlhttpRequest({
+  method:'GET',url,
+  onload:r=>r.status>=200&&r.status<300?resolve(r.responseText):reject(new Error('HTTP '+r.status)),
+  onerror:()=>reject(new Error('Falha de rede'))
+}));
+const sha=async text=>{
+  const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text));
+  return [...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,'0')).join('');
+};
+const unpack=async b64=>{
+  const bin=atob(b64);
+  const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));
+  const ds=new DecompressionStream('gzip');
+  const stream=new Blob([bytes]).stream().pipeThrough(ds);
+  return await new Response(stream).text();
+};
 let source='';
 try{
   const chunks=await Promise.all(Array.from({length:PARTS},(_,i)=>get(BASE+`part-${String(i).padStart(2,'0')}.txt`)));
-  source=chunks.join('');
+  source=await unpack(chunks.join(''));
   const got=await sha(source);
   if(got!==EXPECTED)throw new Error(`Integridade inválida: ${got}`);
   GM_setValue(CACHE,source);
 }catch(err){
   source=GM_getValue(CACHE,'');
-  if(!source){console.error('[Doritus Ultra] Não foi possível carregar o v2.2:',err);return;}
+  if(!source){console.error('[Doritus Ultra] Não foi possível carregar v2.4:',err);return;}
 }
 try{eval(source)}catch(err){console.error('[Doritus Ultra] Falha ao iniciar:',err)}
 })();
