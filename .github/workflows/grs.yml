@@ -1,4 +1,4 @@
-name: Validate profile README
+name: Update profile cards
 
 on:
   push:
@@ -7,26 +7,63 @@ on:
     paths:
       - README.md
       - .github/workflows/grs.yml
-  pull_request:
-    paths:
-      - README.md
-      - .github/workflows/grs.yml
+  schedule:
+    - cron: "0 3 * * *"
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  validate:
+  cards:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      - name: Check README exists and is not empty
+      - name: Generate GitHub stats
+        uses: stats-organization/github-readme-stats-action@v2
+        with:
+          card: stats
+          options: username=${{ github.repository_owner }}&show_icons=true&include_all_commits=true&theme=tokyonight&hide_border=true&rank_icon=github
+          path: profile/stats.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fail_on_error: true
+
+      - name: Generate top languages
+        uses: stats-organization/github-readme-stats-action@v2
+        with:
+          card: top-langs
+          options: username=${{ github.repository_owner }}&layout=compact&langs_count=8&theme=tokyonight&hide_border=true
+          path: profile/top-langs.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fail_on_error: true
+
+      - name: Generate Karnel Termux card
+        uses: stats-organization/github-readme-stats-action@v2
+        with:
+          card: pin
+          options: username=${{ github.repository_owner }}&repo=karnel-termux&theme=tokyonight&hide_border=true
+          path: profile/karnel-termux.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fail_on_error: true
+
+      - name: Generate Nearbit card
+        uses: stats-organization/github-readme-stats-action@v2
+        with:
+          card: pin
+          options: username=${{ github.repository_owner }}&repo=nearbit&theme=tokyonight&hide_border=true
+          path: profile/nearbit.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fail_on_error: true
+
+      - name: Commit generated cards
         shell: bash
         run: |
-          test -s README.md
-          grep -q "Israel Marques" README.md
-          grep -q "github-readme-stats.vercel.app" README.md
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add profile/*.svg
+          git diff --cached --quiet && exit 0
+          git commit -m "chore(profile): refresh generated cards"
+          git push
