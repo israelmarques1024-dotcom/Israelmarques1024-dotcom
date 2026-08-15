@@ -1,0 +1,23 @@
+{
+  "version": "6.4.0",
+  "sourceSha256": "4e938c47c2eb680a0e0ca24b78cab425a37c583c28c03bc5a88b3f6f6035b8d5",
+  "sourceBytes": 62057,
+  "compression": "LZMA preset 9 + Base85",
+  "payloadParts": 4,
+  "payloadCharacters": 22195,
+  "virtualCapacity": 100000000,
+  "validation": {
+    "sampleSize": 1000000,
+    "sampleDistribution": {
+      "6": 250000,
+      "7": 250000,
+      "8": 250000,
+      "9": 250000
+    },
+    "uniqueQuestions": 999109,
+    "questionUniquenessRate": 0.999109,
+    "uniqueSemanticSignatures": 999770,
+    "semanticUniquenessRate": 0.99977,
+    "qualityIssues": 0
+  }
+}
