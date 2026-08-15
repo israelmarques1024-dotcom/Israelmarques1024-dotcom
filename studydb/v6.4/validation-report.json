@@ -1,0 +1,28 @@
+{
+  "engine": "6.4.0",
+  "virtualCapacity": 100000000,
+  "validation": {
+    "count": 1000000,
+    "samplePlan": {
+      "6º ano": 250000,
+      "7º ano": 250000,
+      "8º ano": 250000,
+      "9º ano": 250000
+    },
+    "uniqueQuestionHashes": 999109,
+    "exactQuestionCollisions": 891,
+    "exactQuestionUniquenessRate": 0.999109,
+    "uniqueSemanticSignatures": 999770,
+    "semanticCollisions": 230,
+    "semanticSignatureUniquenessRate": 0.99977,
+    "uniqueCoreSkills": 327,
+    "qualityIssues": {},
+    "qualityPassRate": 1.0
+  },
+  "definitions": {
+    "questionHash": "SHA-256 do texto normalizado da pergunta; mede duplicata textual exata.",
+    "semanticSignature": "Assinatura de série, matéria, tópico, família e parâmetros significativos do cenário.",
+    "coreSkillSignature": "Assinatura da habilidade-base/família sem contar variações de cenário."
+  },
+  "importantNote": "100 milhões é a capacidade virtual determinística do motor. O benchmark valida uma amostra de 1 milhão distribuída pelas quatro séries; não afirma que todos os 100 milhões foram materializados ou individualmente revisados por humanos."
+}
