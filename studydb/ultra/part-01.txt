@@ -1,0 +1,68 @@
+,a,e,h){
+ return {id,grade:g,subject:s,topic:t,difficulty:diff(id),question:q,answer:String(a),explanation:e,hint:h};
+}
+
+function math(id,g,t){
+ const a=mod(id,9000,11)+2,b=mod(id,8000,13)+2,c=mod(id,500,17)+2;
+ if(t.includes('Fraç')){
+  const n1=a%97+1,d1=b%89+2,n2=c%83+1,d2=mod(id,79,19)+2;
+  const num=n1*d2+n2*d1, den=d1*d2, gcd=(x,y)=>{while(y){[x,y]=[y,x%y]}return x},z=gcd(num,den);
+  return rec(id,g,'Matemática',t,`Calcule e simplifique ${n1}/${d1} + ${n2}/${d2}.`,`${num/z}/${den/z}`,'Use denominador comum e simplifique.','Multiplique cada numerador pelo denominador da outra fração.');
+ }
+ if(t.includes('Porcent')||t.includes('Propor')||t.includes('Razão')){
+  const v=a+100,p=[5,10,12.5,15,20,25,30,40,50,75][mod(id,10,21)],ans=v*p/100;
+  return rec(id,g,'Matemática',t,`Quanto é ${String(p).replace('.',',')}% de ${v}?`,fmt(ans),`${p}/100 × ${v} = ${fmt(ans)}.`,'Transforme a porcentagem em uma razão por 100.');
+ }
+ if(t.includes('Equa')||t.includes('Função')||t.includes('Sistemas')||t.includes('algébr')){
+  const x=(a%201)-100,k=b%11+2,m=(c%41)-20;
+  if(t.includes('2º')||t.includes('quadrática')){
+   const ans=k*x*x+m; return rec(id,g,'Matemática',t,`Na função f(x)=${k}x²+(${m}), calcule f(${x}).`,ans,`Substituindo x=${x}, resulta ${ans}.`,'Substitua o valor de x na expressão.');
+  }
+  const rhs=k*x+m;
+  return rec(id,g,'Matemática',t,`Resolva: ${k}x + (${m}) = ${rhs}.`,x,`Isolando x, obtemos x=${x}.`,'Desfaça soma/subtração e depois a multiplicação.');
+ }
+ if(t.includes('Pitág')){
+  const x=a%120+3,y=b%120+4,h=Math.sqrt(x*x+y*y);
+  return rec(id,g,'Matemática',t,`Um triângulo retângulo tem catetos ${x} cm e ${y} cm. Qual é a hipotenusa aproximada?`,fmt(h),'Use a²+b²=c².','Some os quadrados dos catetos e tire a raiz.');
+ }
+ if(t.includes('Estat')){
+  const v=[a%101,b%101,c%101,mod(id,101,31),mod(id,101,37)],avg=v.reduce((x,y)=>x+y,0)/v.length;
+  return rec(id,g,'Matemática',t,`Qual é a média aritmética de ${v.join(', ')}?`,fmt(avg),'Some os valores e divida pela quantidade.','Média = soma ÷ quantidade.');
+ }
+ if(t.includes('Probab')){
+  const total=a%90+10,fav=b%total;
+  return rec(id,g,'Matemática',t,`Há ${total} resultados equiprováveis e ${fav} favoráveis. Qual é a probabilidade?`,`${fav}/${total}`,`P=${fav}/${total}.`,'Casos favoráveis ÷ casos possíveis.');
+ }
+ if(t.includes('Geometr')||t.includes('Plano')||t.includes('Semelhan')||t.includes('Radicia')){
+  const w=a%100+2,h=b%100+2;
+  return rec(id,g,'Matemática',t,`Qual é a área de um retângulo de ${w} cm por ${h} cm?`,`${w*h} cm²`,`A=${w}×${h}=${w*h} cm².`,'Base × altura.');
+ }
+ const x=g===6?a:(a%201)-100,y=g===6?b:(b%201)-100,op=pick(['+','-','×'],id,41);
+ const ans=op==='+'?x+y:op==='-'?x-y:x*y;
+ return rec(id,g,'Matemática',t,`Calcule ${x} ${op} (${y}).`,ans,`O resultado é ${ans}.`,'Observe os sinais e a ordem da operação.');
+}
+
+function portuguese(id,g,t){
+ const n=pick(NAMES,id,51),p=pick(PLACES,id,53),a=pick(ACTIONS,id,59),pur=pick(PURPOSES,id,61);
+ const day=mod(id,28,63)+1,text=`Em ${day} de setembro, ${n} ${a} no ${p} para ${pur}. Depois compartilhou o resultado com a turma.`;
+ if(t.includes('Interpre')||t.includes('Gêneros')||t.includes('Argument')||t.includes('Coesão')){
+  const m=mod(id,4,67);
+  if(m===0)return rec(id,g,'Língua Portuguesa',t,`Leia: “${text}” Qual é a finalidade da ação?`,pur,`A finalidade indicada é ${pur}.`,'Procure a expressão iniciada por “para”.');
+  if(m===1)return rec(id,g,'Língua Portuguesa',t,`Leia: “${text}” Onde ocorre a ação?`,p,`O local é ${p}.`,'Procure a informação de lugar.');
+  if(m===2)return rec(id,g,'Língua Portuguesa',t,`Leia: “${text}” Quem realiza a ação?`,n,`O sujeito é ${n}.`,'Identifique quem pratica a ação.');
+  return rec(id,g,'Língua Portuguesa',t,`Leia: “${text}” Qual ação principal aparece?`,a,`A ação principal é ${a}.`,'Procure o verbo principal.');
+ }
+ if(t.includes('Figura')){
+  const [s,f]=pick([['A cidade acordou cedo.','personificação'],['Esperei uma eternidade.','hipérbole'],['Seus olhos são estrelas.','metáfora'],['Ele corre como o vento.','comparação']],id,71);
+  return rec(id,g,'Língua Portuguesa',t,`Qual figura aparece em “${s}”?`,f,`A figura é ${f}.`,'Procure exagero, comparação ou humanização.');
+ }
+ if(t.includes('Conjun')||t.includes('Orações')){
+  const [c,r]=pick([['porque','causa'],['portanto','conclusão'],['mas','oposição'],['e','adição'],['se','condição']],id,73);
+  return rec(id,g,'Língua Portuguesa',t,`Em “${n} estudou ${c} queria aprender”, que relação “${c}” expressa?`,r,`Expressa ${r}.`,'Observe a relação entre as orações.');
+ }
+ if(t.includes('Tempo')){
+  const [s,r]=pick([['Eu estudo todos os dias.','presente'],['Eu estudei ontem.','pretérito perfeito'],['Eu estudava à tarde.','pretérito imperfeito'],['Eu estudarei amanhã.','futuro do presente']],id,79);
+  return rec(id,g,'Língua Portuguesa',t,`Qual é o tempo verbal em “${s}”?`,r,`O verbo está no ${r}.`,'Observe a forma verbal.');
+ }
+ if(t.includes('Advérb')){
+  const [w,r]=pick([['ontem','tempo'],['aqui','lugar
