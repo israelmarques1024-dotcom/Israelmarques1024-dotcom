@@ -3,7 +3,12 @@
 // @namespace    doritus-studydb
 // @version      4.1.0
 // @description  Assistente de estudo com GitHub + localStorage, sem cliques ou envio automático.
-// @match        *://*/*
+// @match        https://saladofuturo.educacao.sp.gov.br/*
+// @match        https://*.khanacademy.org/*
+// @match        https://app.speak.com/*
+// @match        https://www.speak.com/*
+// @match        https://*.matific.com/*
+// @match        https://*.alura.com.br/*
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
 // @connect      raw.githubusercontent.com
