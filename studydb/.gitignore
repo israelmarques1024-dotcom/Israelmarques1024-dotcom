@@ -1,0 +1,7 @@
+*.jsonl
+*.sqlite
+*.sqlite3
+*.db
+*.gz
+__pycache__/
+*.pyc
