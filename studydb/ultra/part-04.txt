@@ -1,0 +1,40 @@
+11px 15px;font:600 13px system-ui;box-shadow:0 8px 30px #0006}
+#dus{position:fixed;right:18px;bottom:70px;width:min(430px,calc(100vw - 24px));max-height:78vh;overflow:auto;z-index:2147483647;background:#111;color:#eee;border:1px solid #444;border-radius:16px;padding:14px;box-shadow:0 18px 55px #0009;font:13px/1.45 system-ui}
+#dus *{box-sizing:border-box}#dus h2{font-size:17px;margin:0 0 10px}#dus .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#dus select,#dus input,#dus button{width:100%;background:#1d1d1d;color:#eee;border:1px solid #444;border-radius:9px;padding:9px;font:inherit}
+#dus button{cursor:pointer;font-weight:650}#dus button:hover{background:#292929}.dus-card{margin-top:10px;padding:11px;border:1px solid #333;border-radius:11px;background:#181818}
+#dus .muted{color:#999;font-size:11px}.dus-hidden{display:none}.dus-answer{white-space:pre-wrap;margin-top:7px}.dus-meta{display:flex;gap:5px;flex-wrap:wrap}.dus-badge{background:#252525;border-radius:999px;padding:3px 7px;font-size:10px}
+`;document.documentElement.appendChild(s)
+}
+
+function ui(){
+ if(document.getElementById('dus'))return;
+ css();
+ const toggle=document.createElement('button');toggle.id='dus-toggle';toggle.textContent='Doritus Ultra';document.body.appendChild(toggle);
+ const p=document.createElement('section');p.id='dus';p.className='dus-hidden';
+ p.innerHTML=`<h2>${APP} <span class="muted">v${VERSION}</span></h2>
+ <div class="muted">Banco virtual: 100.000.000 registros • 6º–9º ano • offline</div>
+ <div class="grid" style="margin-top:10px"><select id="dus-grade">${GRADES.map(g=>`<option value="${g}">${g}º ano</option>`).join('')}</select><select id="dus-subject">${SUBJECTS.map(s=>`<option>${s}</option>`).join('')}</select></div>
+ <div class="grid" style="margin-top:8px"><input id="dus-id" type="number" min="0" max="99999999" placeholder="ID 0–99.999.999"><button id="dus-random">Gerar questão</button></div>
+ <div id="dus-card" class="dus-card"><div class="muted">Escolha série/matéria e toque em “Gerar questão”.</div></div>
+ <div class="grid" style="margin-top:8px"><button id="dus-hint">Mostrar dica</button><button id="dus-answer">Mostrar resposta</button></div>
+ <div class="grid" style="margin-top:8px"><button id="dus-explain">Explicação</button><button id="dus-copy">Copiar registro</button></div>`;
+ document.body.appendChild(p);
+ toggle.onclick=()=>p.classList.toggle('dus-hidden');
+ let current=null;
+ const card=document.getElementById('dus-card');
+ const render=()=>{if(!current)return;card.innerHTML=`<div class="dus-meta"><span class="dus-badge">${current.grade}º ano</span><span class="dus-badge">${current.subject}</span><span class="dus-badge">${current.topic}</span><span class="dus-badge">${current.difficulty}</span><span class="dus-badge">ID ${current.id}</span></div><div style="margin-top:9px;font-size:14px">${current.question}</div><div id="dus-extra" class="dus-answer"></div>`};
+ const load=id=>{try{current=generate(id);document.getElementById('dus-id').value=current.id;render();addHistory(current)}catch(e){card.textContent=e.message}};
+ document.getElementById('dus-random').onclick=()=>load(randomId(+document.getElementById('dus-grade').value,document.getElementById('dus-subject').value));
+ document.getElementById('dus-id').onchange=e=>load(+e.target.value);
+ document.getElementById('dus-hint').onclick=()=>{if(current)document.getElementById('dus-extra').textContent='Dica: '+current.hint};
+ document.getElementById('dus-answer').onclick=()=>{if(current)document.getElementById('dus-extra').textContent='Resposta: '+current.answer};
+ document.getElementById('dus-explain').onclick=()=>{if(current)document.getElementById('dus-extra').textContent='Explicação: '+current.explanation};
+ document.getElementById('dus-copy').onclick=async()=>{if(current)await navigator.clipboard.writeText(JSON.stringify(current,null,2))};
+}
+
+GM_registerMenuCommand('Abrir Doritus Ultra Study',()=>{document.getElementById('dus')?.classList.remove('dus-hidden')});
+GM_registerMenuCommand('Gerar registro aleatório',()=>console.log(APP,generate(Math.floor(Math.random()*TOTAL))));
+if(document.body)ui();else addEventListener('DOMContentLoaded',ui,{once:true});
+
+})();
