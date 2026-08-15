@@ -1,0 +1,33 @@
+{
+  "version": "2.5.0",
+  "knowledgeVersion": "7.0",
+  "conceptCount": 233,
+  "subjectDistribution": {
+    "Matemática": 40,
+    "Língua Portuguesa": 31,
+    "Ciências": 55,
+    "História": 21,
+    "Geografia": 21,
+    "Inglês": 20,
+    "Programação": 45
+  },
+  "sourceBytes": 97060,
+  "gzipBytes": 26212,
+  "base64Bytes": 34952,
+  "parts": 4,
+  "partSize": 9000,
+  "sha256": "7f85b2bc644097c6721357112d9af3f2af6bdba8bf23e9336e1a602cd468eb86",
+  "features": [
+    "233 conceitos curriculares curados",
+    "detecção por radio/checkbox e ARIA",
+    "recuperação de alternativas customizadas 0/1/2/3",
+    "Certo/Errado",
+    "resposta aberta com pistas conceituais",
+    "hash exato e fuzzy local",
+    "solvers numéricos",
+    "ranking conceitual usando enunciado + alternativas",
+    "inferência de matéria pela página",
+    "confidence gating",
+    "correção manual e import/export"
+  ]
+}
