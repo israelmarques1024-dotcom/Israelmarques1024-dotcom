@@ -1,297 +1,743 @@
 // ==UserScript==
-// @name         Doritus StudyDB - GitHub Edition
-// @namespace    doritus-studydb
-// @version      4.1.0
-// @description  Assistente de estudo com GitHub + localStorage, sem cliques ou envio automático.
-// @match        https://saladofuturo.educacao.sp.gov.br/*
-// @match        https://*.khanacademy.org/*
-// @match        https://app.speak.com/*
-// @match        https://www.speak.com/*
-// @match        https://*.matific.com/*
-// @match        https://*.alura.com.br/*
+// @name         Doritus Ultra - Edição Gist
+// @namespace    doritus-ultra
+// @version      1.0.0
+// @description  Sistema completo de respostas usando GitHub Gist como banco de dados
+// @author       Você
+// @match        *://*/*
+// @grant        GM_setValue
+// @grant        GM_getValue
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
-// @connect      raw.githubusercontent.com
+// @connect      gist.githubusercontent.com
 // @run-at       document-start
 // ==/UserScript==
 
-(() => {
-  'use strict';
+(function() {
+    'use strict';
 
-  const CONFIG = {
-    mode: 'study',
-    cacheMs: 5 * 60 * 1000,
-    debounceMs: 700,
-    version: '4.0',
-    localKey: 'studydb_local_v4',
-    dbRaw: 'https://raw.githubusercontent.com/israelmarques1024-dotcom/Israelmarques1024-dotcom/main/studydb/answers.json',
-    dbPage: 'https://github.com/israelmarques1024-dotcom/Israelmarques1024-dotcom/blob/main/studydb/answers.json',
-    platforms: {
-      CMSP: { domains: ['cmsp', 'saladofuturo'], name: 'CMSP' },
-      KHAN: { domains: ['khanacademy'], name: 'Khan Academy' },
-      SPEAK: { domains: ['speak'], name: 'Speak' },
-      MATIFIC: { domains: ['matific'], name: 'Matific' },
-      ALURA: { domains: ['alura'], name: 'Alura' }
-    }
-  };
+    // ═══════════════════════════════════════════════════════════
+    // CONFIGURAÇÃO - ALTERE AQUI COM SEUS DADOS
+    // ═══════════════════════════════════════════════════════════
+    const CONFIG = {
+        GIST_ID: '979fe4a45fef28fbdc1f1de9debceb17',
+        GITHUB_USER: 'israelmarques1024-dotcom',
 
-  const log = (...a) => console.log('[StudyDB]', ...a);
-  const warn = (...a) => console.warn('[StudyDB]', ...a);
-  const err = (...a) => console.error('[StudyDB]', ...a);
+        // Modo de operação: 'auto' | 'ghost' | 'manual'
+        MODE: 'auto',
 
-  const U = {
-    norm(v) {
-      return String(v ?? '').normalize('NFKC').toLocaleLowerCase('pt-BR')
-        .replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim();
-    },
-    async hash(text) {
-      const bytes = new TextEncoder().encode(this.norm(text).slice(0, 500));
-      const digest = await crypto.subtle.digest('SHA-256', bytes);
-      return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, '0')).join('');
-    },
-    lev(a, b) {
-      a = this.norm(a); b = this.norm(b);
-      if (a === b) return 0;
-      if (!a.length) return b.length;
-      if (!b.length) return a.length;
-      let prev = Array.from({ length: b.length + 1 }, (_, i) => i);
-      for (let i = 1; i <= a.length; i++) {
-        const cur = [i];
-        for (let j = 1; j <= b.length; j++) {
-          const c = a[i - 1] === b[j - 1] ? 0 : 1;
-          cur[j] = Math.min(cur[j - 1] + 1, prev[j] + 1, prev[j - 1] + c);
+        // Tempos em ms (modo discreto)
+        MIN_READ_TIME: 2000,
+        MAX_READ_TIME: 8000,
+        CLICK_DELAY_MIN: 300,
+        CLICK_DELAY_MAX: 1500,
+        TYPING_SPEED: 50, // ms por caractere
+
+        // Cache
+        CACHE_DURATION: 5 * 60 * 1000, // 5 minutos
+
+        // Plataformas suportadas
+        PLATFORMS: {
+            CMSP: { domains: ['cmsp', 'saladofuturo'], name: 'CMSP' },
+            KHAN: { domains: ['khanacademy'], name: 'Khan Academy' },
+            SPEAK: { domains: ['speak'], name: 'Speak' },
+            MATIFIC: { domains: ['matific'], name: 'Matific' },
+            ALURA: { domains: ['alura'], name: 'Alura' }
         }
-        prev = cur;
-      }
-      return prev[b.length];
-    },
-    similarity(a, b) {
-      a = this.norm(a); b = this.norm(b);
-      if (!a || !b) return 0;
-      if (a === b) return 1;
-      if (a.includes(b) || b.includes(a)) return .9;
-      return Math.max(0, 1 - this.lev(a, b) / Math.max(a.length, b.length));
-    },
-    debounce(fn, ms) {
-      let t;
-      return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
-    },
-    copy(text) {
-      if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(text);
-      const ta = document.createElement('textarea');
-      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
-      return Promise.resolve();
-    },
-    download(name, text) {
-      const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
-      const a = document.createElement('a'); a.href = url; a.download = name;
-      document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-    }
-  };
+    };
 
-  const V = {
-    empty() {
-      return { version: CONFIG.version, lastUpdate: new Date().toISOString(), answers: {}, metadata: { totalQuestions: 0, platforms: {}, subjects: {} } };
-    },
-    entry(x) {
-      if (!x || typeof x !== 'object' || Array.isArray(x)) return null;
-      return {
-        answer: typeof x.answer === 'string' ? x.answer.trim() : typeof x.text === 'string' ? x.text.trim() : '',
-        explanation: typeof x.explanation === 'string' ? x.explanation.trim() : '',
-        hint: typeof x.hint === 'string' ? x.hint.trim() : '',
-        subject: typeof x.subject === 'string' ? x.subject.trim() : '',
-        topic: typeof x.topic === 'string' ? x.topic.trim() : '',
-        difficulty: ['easy', 'medium', 'hard'].includes(x.difficulty) ? x.difficulty : '',
-        platform: typeof x.platform === 'string' ? x.platform.trim() : '',
-        timestamp: Number.isFinite(x.timestamp) ? x.timestamp : Date.now(),
-        source: typeof x.source === 'string' ? x.source : undefined,
-        optionIndex: Number.isInteger(x.optionIndex) ? x.optionIndex : undefined
-      };
-    },
-    rebuild(db) {
-      const platforms = {}, subjects = {};
-      for (const x of Object.values(db.answers || {})) {
-        const p = x.platform || 'UNKNOWN', s = x.subject || 'UNKNOWN';
-        platforms[p] = (platforms[p] || 0) + 1;
-        subjects[s] = (subjects[s] || 0) + 1;
-      }
-      db.metadata = { totalQuestions: Object.keys(db.answers || {}).length, platforms, subjects };
-      db.lastUpdate = new Date().toISOString();
-      return db;
-    },
-    clean(raw) {
-      const db = this.empty();
-      if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return db;
-      for (const [hash, value] of Object.entries(raw.answers || {})) {
-        if (!/^[a-f0-9]{64}$/i.test(hash)) { warn('Hash inválido ignorado:', hash); continue; }
-        const x = this.entry(value); if (x) db.answers[hash] = x;
-      }
-      return this.rebuild(db);
-    }
-  };
+    // URLs do Gist
+    const GIST_URLS = {
+        READ: `https://gist.githubusercontent.com/${CONFIG.GITHUB_USER}/${CONFIG.GIST_ID}/raw/answers.json`,
+        PAGE: `https://gist.github.com/${CONFIG.GITHUB_USER}/${CONFIG.GIST_ID}`
+    };
 
-  const DB = {
-    cloud: V.empty(), local: V.empty(), lastFetch: 0,
-    init() {
-      const raw = localStorage.getItem(CONFIG.localKey);
-      if (!raw) return;
-      try { this.local = V.clean(JSON.parse(raw)); } catch (e) { err('Local DB inválido:', e); }
-    },
-    save() { V.rebuild(this.local); localStorage.setItem(CONFIG.localKey, JSON.stringify(this.local)); },
-    request(url) {
-      return new Promise((resolve, reject) => GM_xmlhttpRequest({
-        method: 'GET', url, headers: { Accept: 'application/json' },
-        onload: r => {
-          if (r.status < 200 || r.status >= 300) return reject(new Error('HTTP ' + r.status));
-          try { resolve(JSON.parse(r.responseText)); } catch { reject(new Error('JSON remoto inválido')); }
+    // ═══════════════════════════════════════════════════════════
+    // BANCO DE DADOS HÍBRIDO (GIST + LOCAL)
+    // ═══════════════════════════════════════════════════════════
+    const HybridDB = {
+        cloudData: { answers: {}, metadata: {} },
+        localData: { answers: {}, metadata: { learned: 0 } },
+        lastFetch: 0,
+
+        // Inicializar
+        init() {
+            const saved = localStorage.getItem('doritus_local_db');
+            if (saved) {
+                try {
+                    this.localData = JSON.parse(saved);
+                } catch(e) {
+                    console.error('[Doritus] Erro ao carregar banco local:', e);
+                }
+            }
         },
-        onerror: () => reject(new Error('Falha de rede')),
-        ontimeout: () => reject(new Error('Timeout'))
-      }));
-    },
-    async fetch(force = false) {
-      if (!force && Date.now() - this.lastFetch < CONFIG.cacheMs) return this.cloud;
-      try {
-        this.cloud = V.clean(await this.request(CONFIG.dbRaw + '?t=' + Date.now()));
-        this.lastFetch = Date.now(); log('Cloud:', Object.keys(this.cloud.answers).length); UI.stats();
-      } catch (e) { err('Cloud:', e); UI.status('Falha no banco remoto'); }
-      return this.cloud;
-    },
-    async get(hash) {
-      await this.fetch();
-      if (this.local.answers[hash]) return { ...this.local.answers[hash], _origin: 'local' };
-      if (this.cloud.answers[hash]) return { ...this.cloud.answers[hash], _origin: 'cloud' };
-      return null;
-    },
-    set(hash, data) {
-      const x = V.entry({ ...data, source: 'local', timestamp: Date.now() });
-      if (!x) throw new Error('Entrada inválida');
-      this.local.answers[hash] = x; this.save();
-    },
-    merged() {
-      const db = V.empty(); db.answers = { ...this.cloud.answers, ...this.local.answers }; return V.rebuild(db);
-    },
-    json() { return JSON.stringify(this.merged(), null, 2); },
-    stats() {
-      const c = Object.keys(this.cloud.answers).length, l = Object.keys(this.local.answers).length;
-      return { cloud: c, local: l, total: new Set([...Object.keys(this.cloud.answers), ...Object.keys(this.local.answers)]).size };
+
+        // Salvar localmente
+        saveLocal() {
+            localStorage.setItem('doritus_local_db', JSON.stringify(this.localData));
+        },
+
+        // Buscar no Gist (nuvem)
+        async fetchCloud() {
+            if (Date.now() - this.lastFetch < CONFIG.CACHE_DURATION && this.cloudData.answers) {
+                return this.cloudData;
+            }
+
+            try {
+                const response = await fetch(GIST_URLS.READ + '?t=' + Date.now());
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+
+                const data = await response.json();
+                this.cloudData = data;
+                this.lastFetch = Date.now();
+
+                console.log('[Doritus] Gist carregado:', Object.keys(data.answers || {}).length, 'respostas');
+                return data;
+            } catch (error) {
+                console.error('[Doritus] Erro ao carregar Gist:', error);
+                return { answers: {}, metadata: {} };
+            }
+        },
+
+        // Buscar resposta (mescla nuvem + local)
+        async get(hash) {
+            await this.fetchCloud();
+
+            // Local tem prioridade (respostas novas)
+            if (this.localData.answers[hash]) {
+                return this.localData.answers[hash];
+            }
+
+            // Depois, nuvem
+            if (this.cloudData.answers[hash]) {
+                return this.cloudData.answers[hash];
+            }
+
+            return null;
+        },
+
+        // Salvar nova resposta (sempre local)
+        set(hash, data) {
+            this.localData.answers[hash] = {
+                ...data,
+                timestamp: Date.now(),
+                source: 'local'
+            };
+            this.localData.metadata.learned = (this.localData.metadata.learned || 0) + 1;
+            this.saveLocal();
+        },
+
+        // Estatísticas combinadas
+        getStats() {
+            const cloudCount = Object.keys(this.cloudData.answers || {}).length;
+            const localCount = Object.keys(this.localData.answers || {}).length;
+            return {
+                cloud: cloudCount,
+                local: localCount,
+                total: cloudCount + localCount,
+                learned: this.localData.metadata.learned || 0
+            };
+        },
+
+        // Gerar JSON completo para exportar ao Gist
+        generateExportJSON() {
+            const merged = {
+                ...this.cloudData,
+                answers: {
+                    ...this.cloudData.answers,
+                    ...this.localData.answers
+                },
+                metadata: {
+                    ...this.cloudData.metadata,
+                    lastExport: new Date().toISOString(),
+                    localCount: Object.keys(this.localData.answers).length
+                }
+            };
+            return JSON.stringify(merged, null, 2);
+        },
+
+        // Limpar cache local (após exportar)
+        clearLocal() {
+            this.localData = { answers: {}, metadata: { learned: 0 } };
+            this.saveLocal();
+        }
+    };
+
+    // ═══════════════════════════════════════════════════════════
+    // UTILITÁRIOS
+    // ═══════════════════════════════════════════════════════════
+    const Utils = {
+        // Hash SHA-256
+        async sha256(text) {
+            const normalized = text.toLowerCase()
+                .replace(/[^\w\s]/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim()
+                .substring(0, 200);
+
+            const encoder = new TextEncoder();
+            const data = encoder.encode(normalized);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        },
+
+        // Aguardar
+        sleep(ms) {
+            return new Promise(r => setTimeout(r, ms));
+        },
+
+        random(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        },
+
+        // Simular digitação humana
+        async typeLikeHuman(element, text) {
+            element.focus();
+            element.value = '';
+            for (const char of text) {
+                element.value += char;
+                await this.sleep(CONFIG.TYPING_SPEED + this.random(-20, 20));
+            }
+            element.dispatchEvent(new Event('input', { bubbles: true }));
+            element.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    };
+
+    // ═══════════════════════════════════════════════════════════
+    // DETECTOR DE PLATAFORMAS
+    // ═══════════════════════════════════════════════════════════
+    const PlatformDetector = {
+        getCurrent() {
+            const url = window.location.href.toLowerCase();
+            const hostname = window.location.hostname.toLowerCase();
+
+            for (const [key, platform] of Object.entries(CONFIG.PLATFORMS)) {
+                if (platform.domains.some(d => url.includes(d) || hostname.includes(d))) {
+                    return { key, ...platform };
+                }
+            }
+            return null;
+        },
+
+        extractQuestionData() {
+            const platform = this.getCurrent();
+            if (!platform) return null;
+
+            const extractors = {
+                CMSP: () => {
+                    const questionEl = document.querySelector('.question-text, .enunciado, [data-testid="question-text"], .questao');
+                    const options = document.querySelectorAll('.option, .alternativa, [data-testid="option"], .choice');
+
+                    if (!questionEl || options.length === 0) return null;
+
+                    return {
+                        text: questionEl.innerText.trim(),
+                        options: Array.from(options).map((opt, i) => ({
+                            text: opt.innerText.trim(),
+                            element: opt,
+                            index: i
+                        })),
+                        type: 'multiple_choice'
+                    };
+                },
+
+                KHAN: () => {
+                    const questionEl = document.querySelector('[data-testid="exercise-title"], .exercise-text, .problem');
+                    const inputs = document.querySelectorAll('input[type="text"], input[type="number"]');
+                    const choices = document.querySelectorAll('[data-testid="choice"]');
+
+                    if (!questionEl) return null;
+
+                    if (choices.length > 0) {
+                        return {
+                            text: questionEl.innerText.trim(),
+                            options: Array.from(choices).map((c, i) => ({
+                                text: c.innerText.trim(),
+                                element: c,
+                                index: i
+                            })),
+                            type: 'multiple_choice'
+                        };
+                    } else if (inputs.length > 0) {
+                        return {
+                            text: questionEl.innerText.trim(),
+                            inputs: Array.from(inputs).map((inp, i) => ({
+                                element: inp,
+                                index: i
+                            })),
+                            type: 'input'
+                        };
+                    }
+                    return null;
+                },
+
+                SPEAK: () => {
+                    const prompt = document.querySelector('.prompt, .question, [data-testid="prompt"]');
+                    const choices = document.querySelectorAll('.choice, .option');
+
+                    if (!prompt) return null;
+
+                    return {
+                        text: prompt.innerText.trim(),
+                        options: Array.from(choices).map((c, i) => ({
+                            text: c.innerText.trim(),
+                            element: c,
+                            index: i
+                        })),
+                        type: 'multiple_choice'
+                    };
+                },
+
+                MATIFIC: () => {
+                    const question = document.querySelector('.question-text, .instruction');
+                    const interactives = document.querySelectorAll('.interactive, .draggable');
+
+                    if (!question) return null;
+                    return {
+                        text: question.innerText.trim(),
+                        elements: Array.from(interactives),
+                        type: 'interactive'
+                    };
+                },
+
+                ALURA: () => {
+                    const question = document.querySelector('.question-text, .enunciado');
+                    const options = document.querySelectorAll('.option, .alternativa');
+
+                    if (!question || options.length === 0) return null;
+                    return {
+                        text: question.innerText.trim(),
+                        options: Array.from(options).map((o, i) => ({
+                            text: o.innerText.trim(),
+                            element: o,
+                            index: i
+                        })),
+                        type: 'multiple_choice'
+                    };
+                }
+            };
+
+            const extractor = extractors[platform.key];
+            return extractor ? extractor() : null;
+        }
+    };
+
+    // ═══════════════════════════════════════════════════════════
+    // MOTOR DE RESPOSTAS
+    // ═══════════════════════════════════════════════════════════
+    const AnswerEngine = {
+        async process() {
+            const data = PlatformDetector.extractQuestionData();
+            if (!data) return false;
+
+            const hash = await Utils.sha256(data.text);
+            const answer = await HybridDB.get(hash);
+
+            if (!answer) {
+                console.log('[Doritus] Pergunta nova:', data.text.substring(0, 50) + '...');
+                UI.showStatus('❓ Pergunta nova - não está no banco');
+                return false;
+            }
+
+            console.log('[Doritus] Resposta encontrada:', answer);
+
+            if (CONFIG.MODE === 'ghost') {
+                this.highlightAnswer(data, answer);
+                UI.showStatus('👻 Modo Ghost: resposta destacada');
+                return true;
+            }
+
+            if (CONFIG.MODE === 'auto') {
+                await this.executeAnswer(data, answer);
+                return true;
+            }
+
+            return false;
+        },
+
+        highlightAnswer(data, answer) {
+            if (data.type === 'multiple_choice' && data.options) {
+                const target = data.options.find(o =>
+                    o.index === answer.optionIndex ||
+                    o.text.includes(answer.text) ||
+                    answer.text.includes(o.text)
+                );
+                if (target) {
+                    target.element.style.border = '3px solid #00ff00';
+                    target.element.style.background = '#00ff0020';
+                    target.element.style.boxShadow = '0 0 10px #00ff00';
+                }
+            }
+        },
+
+        async executeAnswer(data, answer) {
+            // Atraso de "leitura"
+            await Utils.sleep(Utils.random(CONFIG.MIN_READ_TIME, CONFIG.MAX_READ_TIME));
+
+            if (data.type === 'multiple_choice' && data.options) {
+                const target = data.options.find(o =>
+                    o.index === answer.optionIndex ||
+                    this.similarity(o.text, answer.text) > 0.7
+                );
+
+                if (target) {
+                    await this.humanClick(target.element);
+                    UI.showNotification('✅ Resposta aplicada!');
+                }
+            } else if (data.type === 'input' && data.inputs && answer.text) {
+                const input = data.inputs[answer.inputIndex || 0];
+                if (input) {
+                    await Utils.typeLikeHuman(input.element, answer.text);
+                    UI.showNotification('✅ Texto digitado!');
+                }
+            }
+        },
+
+        async humanClick(element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            await Utils.sleep(Utils.random(CONFIG.CLICK_DELAY_MIN, CONFIG.CLICK_DELAY_MAX));
+
+            // Eventos realistas
+            element.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }));
+            await Utils.sleep(Utils.random(50, 150));
+            element.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+            await Utils.sleep(Utils.random(30, 80));
+            element.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+            element.click();
+        },
+
+        similarity(a, b) {
+            if (!a || !b) return 0;
+            a = a.toLowerCase().trim();
+            b = b.toLowerCase().trim();
+            if (a === b) return 1;
+            if (a.includes(b) || b.includes(a)) return 0.8;
+            // Distância de Levenshtein simplificada
+            const longer = a.length > b.length ? a : b;
+            const shorter = a.length > b.length ? b : a;
+            if (longer.length === 0) return 1;
+            const distance = longer.split('').filter((c, i) => c !== shorter[i]).length;
+            return (longer.length - distance) / longer.length;
+        },
+
+        async learn(data, correctAnswer) {
+            const hash = await Utils.sha256(data.text);
+
+            const answerData = {
+                text: correctAnswer,
+                optionIndex: data.options?.findIndex(o => o.text === correctAnswer),
+                inputIndex: 0,
+                platform: PlatformDetector.getCurrent()?.key,
+                timestamp: Date.now()
+            };
+
+            HybridDB.set(hash, answerData);
+            UI.showNotification('📚 Aprendido! Salvo localmente.');
+        }
+    };
+
+    // ═══════════════════════════════════════════════════════════
+    // INTERFACE DO USUÁRIO
+    // ═══════════════════════════════════════════════════════════
+    const UI = {
+        panel: null,
+
+        init() {
+            this.createPanel();
+            this.applyStyles();
+        },
+
+        applyStyles() {
+            const css = `
+                @keyframes doritus-slide-in {
+                    from { transform: translateX(400px); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes doritus-pulse {
+                    0%, 100% { box-shadow: 0 0 5px #00ff00; }
+                    50% { box-shadow: 0 0 20px #00ff00, 0 0 40px #00ff00; }
+                }
+                .doritus-panel {
+                    animation: doritus-slide-in 0.5s ease;
+                }
+                .doritus-btn {
+                    transition: all 0.2s;
+                }
+                .doritus-btn:hover {
+                    transform: scale(1.05);
+                }
+                .doritus-notification {
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    padding: 15px 25px;
+                    border-radius: 10px;
+                    font-family: 'Segoe UI', sans-serif;
+                    font-size: 14px;
+                    z-index: 999999;
+                    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+                    animation: slideIn 0.3s ease;
+                }
+            `;
+
+            const style = document.createElement('style');
+            style.textContent = css;
+            document.head.appendChild(style);
+        },
+
+        createPanel() {
+            this.panel = document.createElement('div');
+            this.panel.className = 'doritus-panel';
+            this.panel.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                width: 320px;
+                background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+                border-radius: 15px;
+                padding: 20px;
+                color: #fff;
+                font-family: 'Segoe UI', system-ui, sans-serif;
+                z-index: 999999;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+                border: 1px solid #00ff0040;
+            `;
+
+            this.panel.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h3 style="margin: 0; color: #00ff00; font-size: 18px;">🧠 Doritus Ultra</h3>
+                    <span id="doritus-status" style="font-size: 11px; color: #888;">Pronto</span>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="font-size: 12px; color: #aaa;">Modo:</label>
+                    <select id="doritus-mode" style="width: 100%; padding: 8px; background: #0f0f23; color: #fff; border: 1px solid #333; border-radius: 5px; margin-top: 5px;">
+                        <option value="auto">🤖 Automático</option>
+                        <option value="ghost">👻 Fantasma (só mostra)</option>
+                        <option value="manual">✋ Manual</option>
+                    </select>
+                </div>
+
+                <div style="display: grid; gap: 8px; margin-bottom: 15px;">
+                    <button id="doritus-answer" class="doritus-btn" style="padding: 10px; background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); border: none; color: white; border-radius: 8px; cursor: pointer; font-weight: bold;">
+                        ⚡ Responder agora
+                    </button>
+                    <button id="doritus-learn" class="doritus-btn" style="padding: 10px; background: linear-gradient(135deg, #0984e3 0%, #6c5ce7 100%); border: none; color: white; border-radius: 8px; cursor: pointer;">
+                        📚 Ensinar resposta
+                    </button>
+                    <button id="doritus-export" class="doritus-btn" style="padding: 10px; background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%); border: none; color: white; border-radius: 8px; cursor: pointer;">
+                        ☁️ Exportar para o Gist
+                    </button>
+                </div>
+
+                <div id="doritus-stats" style="background: #0f0f23; padding: 10px; border-radius: 8px; font-size: 12px; color: #aaa;">
+                    Carregando estatísticas...
+                </div>
+
+                <div style="margin-top: 10px; font-size: 10px; color: #666; text-align: center;">
+                    Gist: ${CONFIG.GIST_ID.substring(0, 8)}...
+                </div>
+
+                <button id="doritus-minimize" style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: #666; cursor: pointer; font-size: 16px;">−</button>
+            `;
+
+            document.body.appendChild(this.panel);
+            this.attachEvents();
+            this.updateStats();
+        },
+
+        attachEvents() {
+            // Modo
+            document.getElementById('doritus-mode').value = CONFIG.MODE;
+            document.getElementById('doritus-mode').onchange = (e) => {
+                CONFIG.MODE = e.target.value;
+                this.showStatus(`Modo: ${e.target.value}`);
+            };
+
+            // Responder
+            document.getElementById('doritus-answer').onclick = async () => {
+                const success = await AnswerEngine.process();
+                if (!success) {
+                    this.showNotification('❓ Nenhuma resposta encontrada no banco');
+                }
+            };
+
+            // Ensinar
+            document.getElementById('doritus-learn').onclick = () => {
+                this.showTeachDialog();
+            };
+
+            // Exportar
+            document.getElementById('doritus-export').onclick = () => {
+                this.showExportDialog();
+            };
+
+            // Minimizar
+            let minimized = false;
+            document.getElementById('doritus-minimize').onclick = () => {
+                minimized = !minimized;
+                const content = this.panel.querySelectorAll('div:not(:first-child), button:not(#doritus-minimize)');
+                content.forEach(el => el.style.display = minimized ? 'none' : '');
+                this.panel.style.width = minimized ? '150px' : '320px';
+            };
+
+            // Arrastar
+            let isDragging = false, startX, startY, initialX, initialY;
+            const header = this.panel.querySelector('div:first-child');
+
+            header.onmousedown = (e) => {
+                if (e.target.tagName === 'SELECT') return;
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                initialX = this.panel.offsetLeft;
+                initialY = this.panel.offsetTop;
+            };
+
+            document.onmousemove = (e) => {
+                if (!isDragging) return;
+                this.panel.style.right = 'auto';
+                this.panel.style.left = (initialX + e.clientX - startX) + 'px';
+                this.panel.style.top = (initialY + e.clientY - startY) + 'px';
+            };
+
+            document.onmouseup = () => isDragging = false;
+        },
+
+        showTeachDialog() {
+            const data = PlatformDetector.extractQuestionData();
+            if (!data) {
+                this.showNotification('❌ Não detectei pergunta nesta página');
+                return;
+            }
+
+            const answer = prompt(`📚 Ensinar nova resposta\n\nPergunta detectada:\n"${data.text.substring(0, 100)}..."\n\nDigite a resposta correta:`);
+
+            if (answer && answer.trim()) {
+                AnswerEngine.learn(data, answer.trim());
+                this.updateStats();
+            }
+        },
+
+        showExportDialog() {
+            const json = HybridDB.generateExportJSON();
+            const stats = HybridDB.getStats();
+
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.8);
+                z-index: 9999999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            `;
+
+            modal.innerHTML = `
+                <div style="background: #1a1a2e; padding: 30px; border-radius: 15px; max-width: 600px; width: 90%; color: white;">
+                    <h3 style="margin-top: 0; color: #00ff00;">☁️ Exportar para o Gist</h3>
+                    <p style="color: #aaa; font-size: 14px;">
+                        Você tem <b>${stats.local}</b> respostas locais para enviar ao Gist.
+                    </p>
+                    <textarea id="export-json" style="width: 100%; height: 200px; background: #0f0f23; color: #00ff00; border: 1px solid #333; border-radius: 8px; padding: 10px; font-family: monospace; font-size: 12px; resize: none;">${json}</textarea>
+                    <div style="margin-top: 15px; display: flex; gap: 10px;">
+                        <button id="copy-json" style="flex: 1; padding: 12px; background: #00b894; border: none; color: white; border-radius: 8px; cursor: pointer;">📋 Copiar JSON</button>
+                        <button id="open-gist" style="flex: 1; padding: 12px; background: #0984e3; border: none; color: white; border-radius: 8px; cursor: pointer;">🔗 Abrir Gist</button>
+                        <button id="close-modal" style="flex: 1; padding: 12px; background: #636e72; border: none; color: white; border-radius: 8px; cursor: pointer;">Fechar</button>
+                    </div>
+                    <div style="margin-top: 15px; padding: 10px; background: #2d3436; border-radius: 8px; font-size: 12px; color: #ddd;">
+                        <b>Como atualizar:</b><br>
+                        1. Clique em "Copiar JSON"<br>
+                        2. Clique em "Abrir Gist"<br>
+                        3. Cole o JSON no arquivo answers.json<br>
+                        4. Salve o Gist
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+
+            document.getElementById('copy-json').onclick = () => {
+                const textarea = document.getElementById('export-json');
+                textarea.select();
+                document.execCommand('copy');
+                this.showNotification('✅ JSON copiado!');
+            };
+
+            document.getElementById('open-gist').onclick = () => {
+                window.open(GIST_URLS.PAGE, '_blank');
+            };
+
+            document.getElementById('close-modal').onclick = () => {
+                modal.remove();
+            };
+        },
+
+        updateStats() {
+            const stats = HybridDB.getStats();
+            const el = document.getElementById('doritus-stats');
+            if (el) {
+                el.innerHTML = `
+                    ☁️ Nuvem: <b style="color: #74b9ff;">${stats.cloud}</b> |
+                    💻 Local: <b style="color: #00b894;">${stats.local}</b> |
+                    📚 Aprendidas: <b style="color:#fdcb6e">${stats.learned}</b>
+                `;
+            }
+        },
+
+        showStatus(text) {
+            const el = document.getElementById('doritus-status');
+            if (el) {
+                el.textContent = text;
+                setTimeout(() => el.textContent = 'Pronto', 3000);
+            }
+        },
+
+        showNotification(text) {
+            const notif = document.createElement('div');
+            notif.className = 'doritus-notification';
+            notif.textContent = text;
+            document.body.appendChild(notif);
+            setTimeout(() => {
+                notif.style.opacity = '0';
+                setTimeout(() => notif.remove(), 300);
+            }, 3000);
+        }
+    };
+
+    // ═══════════════════════════════════════════════════════════
+    // INICIALIZAÇÃO
+    // ═══════════════════════════════════════════════════════════
+    async function init() {
+        HybridDB.init();
+        await HybridDB.fetchCloud(); // Pré-carregar
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => UI.init());
+        } else {
+            UI.init();
+        }
+
+        // Observar mudanças na página (SPA)
+        const observer = new MutationObserver(() => {
+            if (CONFIG.MODE === 'auto') {
+                setTimeout(() => AnswerEngine.process(), 1500);
+            }
+        });
+
+        setTimeout(() => {
+            observer.observe(document.body, { childList: true, subtree: true });
+        }, 2000);
+
+        // Tentar responder após carregar
+        setTimeout(() => AnswerEngine.process(), 3000);
     }
-  };
 
-  const P = {
-    current() {
-      const hay = (location.href + ' ' + location.hostname).toLowerCase();
-      for (const [key, p] of Object.entries(CONFIG.platforms)) if (p.domains.some(d => hay.includes(d))) return { key, ...p };
-      return null;
-    },
-    extract() {
-      const p = this.current(); if (!p) return null;
-      const q = selectors => document.querySelector(selectors);
-      const qa = selectors => [...document.querySelectorAll(selectors)];
-      let el, opts = [], type = 'unknown';
-      if (p.key === 'CMSP') { el = q('.question-text,.enunciado,[data-testid="question-text"],.questao'); opts = qa('.option,.alternativa,[data-testid="option"],.choice'); }
-      if (p.key === 'KHAN') { el = q('[data-testid="exercise-title"],.exercise-text,.problem'); opts = qa('[data-testid="choice"]'); type = opts.length ? 'multiple_choice' : qa('input[type="text"],input[type="number"]').length ? 'input' : 'unknown'; }
-      if (p.key === 'SPEAK') { el = q('.prompt,.question,[data-testid="prompt"]'); opts = qa('.choice,.option'); }
-      if (p.key === 'MATIFIC') { el = q('.question-text,.instruction'); type = 'interactive'; }
-      if (p.key === 'ALURA') { el = q('.question-text,.enunciado'); opts = qa('.option,.alternativa'); }
-      if (!el?.innerText?.trim()) return null;
-      if (type === 'unknown' && opts.length) type = 'multiple_choice';
-      return { text: el.innerText.trim(), options: opts.map((e, i) => ({ text: e.innerText.trim(), index: i })), type, platform: p };
-    }
-  };
+    // Iniciar
+    init();
 
-  const Engine = {
-    current: null,
-    async process() {
-      const data = P.extract();
-      if (!data) { this.current = null; UI.render(null); UI.status('Nenhuma questão detectada'); return false; }
-      const hash = await U.hash(data.text), answer = await DB.get(hash);
-      this.current = { ...data, hash, answer }; UI.render(this.current); UI.status(answer ? `Questão encontrada (${answer._origin})` : 'Questão nova');
-      return !!answer;
-    },
-    async edit() {
-      if (!this.current) await this.process(); const c = this.current;
-      if (!c) return UI.notify('Nenhuma questão detectada.');
-      const old = c.answer || {};
-      const ask = (label, value = '') => prompt(label, value);
-      const answer = ask('Resposta de referência:', old.answer || ''); if (answer === null) return;
-      const hint = ask('Dica:', old.hint || ''); if (hint === null) return;
-      const explanation = ask('Explicação:', old.explanation || ''); if (explanation === null) return;
-      const subject = ask('Matéria:', old.subject || ''); if (subject === null) return;
-      const topic = ask('Tópico:', old.topic || ''); if (topic === null) return;
-      let difficulty = ask('Dificuldade: easy, medium ou hard', old.difficulty || 'medium'); if (difficulty === null) return;
-      difficulty = ['easy', 'medium', 'hard'].includes(difficulty.trim().toLowerCase()) ? difficulty.trim().toLowerCase() : 'medium';
-      let optionIndex;
-      if (c.options?.length && answer.trim()) {
-        let best = { score: 0, index: -1 };
-        for (const o of c.options) { const score = U.similarity(o.text, answer); if (score > best.score) best = { score, index: o.index }; }
-        if (best.score >= .85) optionIndex = best.index;
-      }
-      DB.set(c.hash, { answer: answer.trim(), hint: hint.trim(), explanation: explanation.trim(), subject: subject.trim(), topic: topic.trim(), difficulty, platform: c.platform.key, optionIndex });
-      UI.notify('Salvo localmente.'); await this.process(); UI.stats();
-    }
-  };
-
-  const UI = {
-    panel: null,
-    init() {
-      if (this.panel || !document.body) return;
-      const style = document.createElement('style');
-      style.textContent = `.studydb{position:fixed;top:20px;right:20px;width:min(360px,calc(100vw - 40px));max-height:calc(100vh - 40px);overflow:auto;background:#151826;color:#f4f6fb;border:1px solid #33394d;border-radius:14px;padding:16px;z-index:2147483647;font:13px system-ui;box-shadow:0 18px 50px #0006}.studydb h2{margin:0;font-size:17px}.sdb-muted{color:#9aa3b8}.sdb-box{margin-top:10px;padding:10px;border-radius:9px;background:#0f1220;border:1px solid #262c40;white-space:pre-wrap;overflow-wrap:anywhere}.sdb-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.sdb-btn,.sdb-select{border:1px solid #3a425c;border-radius:8px;background:#22283a;color:#fff;padding:8px 10px;font:inherit;cursor:pointer}.sdb-note{position:fixed;right:20px;bottom:20px;z-index:2147483647;background:#171b28;color:#fff;border:1px solid #3a425c;border-radius:10px;padding:12px 14px}`;
-      document.head.appendChild(style);
-      const panel = this.panel = document.createElement('aside'); panel.className = 'studydb';
-      const title = document.createElement('h2'); title.textContent = 'StudyDB';
-      const status = document.createElement('div'); status.id = 'sdb-status'; status.className = 'sdb-muted'; status.textContent = 'Inicializando…';
-      const modeRow = document.createElement('div'); modeRow.className = 'sdb-row';
-      const select = document.createElement('select'); select.id = 'sdb-mode'; select.className = 'sdb-select';
-      [['study','Estudo'],['hint','Dica'],['manual','Manual']].forEach(([v,t]) => { const o=document.createElement('option');o.value=v;o.textContent=t;select.appendChild(o); }); select.value=CONFIG.mode; modeRow.append('Modo: ', select);
-      const question = document.createElement('div'); question.id = 'sdb-question'; question.className = 'sdb-box sdb-muted'; question.textContent = 'Nenhuma questão detectada.';
-      const result = document.createElement('div'); result.id = 'sdb-result'; result.className = 'sdb-box'; result.textContent = 'Nenhum conteúdo exibido.';
-      const actions = document.createElement('div'); actions.className = 'sdb-row';
-      const sync = document.createElement('div'); sync.className = 'sdb-row';
-      const b = (text,id) => { const x=document.createElement('button');x.type='button';x.className='sdb-btn';x.id=id;x.textContent=text;return x; };
-      actions.append(b('Ver dica','sdb-hint'), b('Ver explicação','sdb-exp'), b('Ver resposta','sdb-answer'), b('Adicionar / editar','sdb-edit'));
-      sync.append(b('Atualizar GitHub','sdb-refresh'), b('Exportar JSON','sdb-export'), b('Copiar JSON','sdb-copy'), b('Abrir banco','sdb-open'));
-      const stats = document.createElement('div'); stats.id = 'sdb-stats'; stats.className = 'sdb-box sdb-muted';
-      panel.append(title,status,modeRow,question,result,actions,sync,stats); document.body.appendChild(panel);
-      select.onchange = e => { CONFIG.mode = e.target.value; this.status('Modo: ' + CONFIG.mode); };
-      document.getElementById('sdb-hint').onclick = () => this.field('hint','Dica');
-      document.getElementById('sdb-exp').onclick = () => this.field('explanation','Explicação');
-      document.getElementById('sdb-answer').onclick = () => this.field('answer','Resposta');
-      document.getElementById('sdb-edit').onclick = () => Engine.edit();
-      document.getElementById('sdb-refresh').onclick = async () => { DB.lastFetch=0; await DB.fetch(true); await Engine.process(); this.notify('Banco GitHub atualizado.'); };
-      document.getElementById('sdb-export').onclick = () => { U.download('answers.json', DB.json()); this.notify('answers.json exportado.'); };
-      document.getElementById('sdb-copy').onclick = async () => { await U.copy(DB.json()); this.notify('JSON copiado.'); };
-      document.getElementById('sdb-open').onclick = () => window.open(CONFIG.dbPage, '_blank', 'noopener,noreferrer');
-      this.stats();
-    },
-    render(c) {
-      const q = document.getElementById('sdb-question'), r = document.getElementById('sdb-result'); if (!q || !r) return;
-      r.textContent = 'Nenhum conteúdo exibido.';
-      q.textContent = c ? `Plataforma: ${c.platform.name}\nBanco: ${c.answer?._origin || 'não encontrada'}\nHash: ${c.hash}\n\n${c.text}` : 'Nenhuma questão detectada.';
-    },
-    field(field,label) {
-      const a = Engine.current?.answer, r = document.getElementById('sdb-result'); if (!r) return;
-      r.textContent = !a ? 'Esta questão não está cadastrada no banco.' : a[field] ? `${label}:\n${a[field]}` : `${label} ainda não cadastrada.`;
-    },
-    stats() {
-      const el = document.getElementById('sdb-stats'); if (!el) return; const s=DB.stats(),p=P.current();
-      el.textContent=`Plataforma: ${p?.name || 'nenhuma'}\nCloud: ${s.cloud}\nLocal: ${s.local}\nTotal único: ${s.total}\nVersão: ${CONFIG.version}`;
-    },
-    status(t) { const el=document.getElementById('sdb-status'); if(el) el.textContent=t; },
-    notify(t) { const n=document.createElement('div');n.className='sdb-note';n.textContent=t;document.body.appendChild(n);setTimeout(()=>n.remove(),2800); }
-  };
-
-  async function start() {
-    DB.init(); UI.init(); await DB.fetch(); await Engine.process(); UI.stats();
-    const run = U.debounce(async () => { await Engine.process(); UI.stats(); }, CONFIG.debounceMs);
-    new MutationObserver(run).observe(document.body, { childList: true, subtree: true });
-    GM_registerMenuCommand('StudyDB: Atualizar GitHub', async () => { DB.lastFetch=0; await DB.fetch(true); await Engine.process(); });
-    GM_registerMenuCommand('StudyDB: Exportar JSON', () => U.download('answers.json', DB.json()));
-    GM_registerMenuCommand('StudyDB: Abrir banco', () => window.open(CONFIG.dbPage, '_blank', 'noopener,noreferrer'));
-  }
-
-  const boot = () => start().catch(e => err('Falha fatal:', e));
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true }); else boot();
 })();
