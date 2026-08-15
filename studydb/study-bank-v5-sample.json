@@ -1,0 +1,62 @@
+[
+  {
+    "id": 0,
+    "grade": 6,
+    "subject": "Matemática",
+    "topic": "Números naturais",
+    "question": "Calcule 951 - (56).",
+    "answer": "895",
+    "explanation": "O resultado é 895.",
+    "hint": "Observe os sinais.",
+    "difficulty": "easy",
+    "questionHash": "e5706ce426a445c838b9be0ed51a7607b2a87c4bf8bd148c21247a13216cb7cd",
+    "recordHash": "9d86919b2915153d7eaa131492573bfc9f6e5ef15d47a11141b010ea92c790ba",
+    "generated": true,
+    "source": "study-bank-v5.1"
+  },
+  {
+    "id": 25000000,
+    "grade": 7,
+    "subject": "Matemática",
+    "topic": "Probabilidade",
+    "question": "Há 71 resultados e 57 favoráveis. Qual é a probabilidade?",
+    "answer": "57/71",
+    "explanation": "P=57/71.",
+    "hint": "Favoráveis ÷ possíveis.",
+    "difficulty": "hard",
+    "questionHash": "2dc529b7064f2fea8d0f287267a8f95926a613a3e9795dd3afe8289f542ea2d0",
+    "recordHash": "c01675485e776c4c5a5238270bbd39d49fad1ca63291ff63d51a88ed1086fc01",
+    "generated": true,
+    "source": "study-bank-v5.1"
+  },
+  {
+    "id": 50000000,
+    "grade": 8,
+    "subject": "Matemática",
+    "topic": "Estatística",
+    "question": "Qual é a média de [55, 76, 36, 87, 34]?",
+    "answer": "57,6",
+    "explanation": "Some e divida por 5.",
+    "hint": "Média = soma ÷ quantidade.",
+    "difficulty": "medium",
+    "questionHash": "3b88e9990b166c7500e43c4d9172636f2be6fc48486f0c661e2182ad1b56668a",
+    "recordHash": "09f1be09bf69d406a4eba39b1da10edde052fd21fa65857a369fd1760030d584",
+    "generated": true,
+    "source": "study-bank-v5.1"
+  },
+  {
+    "id": 75000000,
+    "grade": 9,
+    "subject": "Matemática",
+    "topic": "Radiciação",
+    "question": "Calcule 47 - (-44).",
+    "answer": "91",
+    "explanation": "O resultado é 91.",
+    "hint": "Observe os sinais.",
+    "difficulty": "hard",
+    "questionHash": "dd4ea0c788027eccf08ca704495125821652130f1c7c36822c027dd89643d69b",
+    "recordHash": "135dcba57bfa9ff2ddf3ac16fcb421eee9e883b204a275cb6929a5fa03fa211a",
+    "generated": true,
+    "source": "study-bank-v5.1"
+  }
+]
