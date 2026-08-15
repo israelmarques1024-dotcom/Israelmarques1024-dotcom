@@ -6,6 +6,7 @@
 // @author       israelmarques1024-dotcom
 // @match        *://*/*
 // @grant        GM_xmlhttpRequest
+// @grant        GM_registerMenuCommand
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @connect      raw.githubusercontent.com
@@ -41,5 +42,5 @@ try{
  source=GM_getValue(CACHE,'');
  if(!source){console.error('[Doritus Ultra] Não foi possível carregar o bundle:',err);return;}
 }
-try{(0,eval)(source)}catch(err){console.error('[Doritus Ultra] Erro ao iniciar:',err);}
+try{eval(source)}catch(err){console.error('[Doritus Ultra] Erro ao iniciar:',err);}
 })();
