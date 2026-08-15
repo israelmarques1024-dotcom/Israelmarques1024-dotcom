@@ -1,0 +1,56 @@
+'],['lentamente','modo'],['talvez','dúvida'],['muito','intensidade']],id,83);
+  return rec(id,g,'Língua Portuguesa',t,`Em “${n} respondeu ${w}”, que circunstância “${w}” expressa?`,r,`Expressa ${r}.`,'Observe a ideia acrescentada.');
+ }
+ return rec(id,g,'Língua Portuguesa',t,`Na oração “${n} ${a} no ${p}”, qual é o sujeito?`,n,`O sujeito é ${n}.`,'Pergunte quem pratica a ação.');
+}
+
+const SCI={
+'Células':['Qual estrutura controla a entrada e saída de substâncias da célula?','Membrana plasmática.'],
+'Bactérias':['Bactérias são procariontes ou eucariontes?','Procariontes.'],
+'Vírus':['Vírus são formados por células?','Não. São acelulares.'],
+'Ecologia':['Qual é o papel dos decompositores?','Decompor matéria orgânica e reciclar nutrientes.'],
+'Genética':['O que é DNA?','Molécula que armazena informação genética.'],
+'Átomos':['Qual partícula subatômica tem carga negativa?','Elétron.'],
+'Energia':['Qual é a ideia da conservação de energia?','A energia se transforma; não é criada nem destruída.'],
+'Eletricidade':['Qual unidade mede corrente elétrica?','ampere (A)']
+};
+function science(id,g,t){
+ if(SCI[t]){const [q,a]=SCI[t];return rec(id,g,'Ciências',t,q,a,`Revisão do conceito de ${t}.`,'Associe o conceito à definição.')}
+ if(t.includes('Velocidade')||t==='Movimento'||t==='Física'){const d=mod(id,5000,91)+10,tm=mod(id,299,97)+2;return rec(id,g,'Ciências',t,`Um móvel percorre ${d} m em ${tm} s. Qual é a velocidade média?`,`${fmt(d/tm)} m/s`,'Use v=distância/tempo.','Divida a distância pelo tempo.')}
+ if(t.includes('Força')){const m=mod(id,200,101)+1;return rec(id,g,'Ciências',t,`Adote g=10 N/kg. Qual é o peso de um corpo de ${m} kg?`,`${m*10} N`,'P=m×g.','Multiplique massa por gravidade.')}
+ if(t.includes('Química')||t==='Misturas')return rec(id,g,'Ciências',t,'Água e óleo em repouso formam mistura homogênea ou heterogênea?','Heterogênea.','Há mais de uma fase visível.','Observe o número de fases.');
+ return rec(id,g,'Ciências',t,`Qual conceito central deve ser revisado em ${t}?`,t,`Este registro revisa ${t}.`,'Revise a definição do tópico.');
+}
+
+const HIST={
+'Renascimento':'Movimento cultural que valorizou humanismo e referências clássicas.',
+'Reforma Protestante':'Movimento religioso do século XVI que contestou práticas e doutrinas da Igreja Católica.',
+'Contrarreforma':'Ações da Igreja Católica em resposta à Reforma Protestante.',
+'Mercantilismo':'Práticas econômicas ligadas ao fortalecimento dos Estados e ao comércio.',
+'Iluminismo':'Movimento intelectual que valorizou razão, crítica, direitos e governo.',
+'Revolução Industrial':'Expansão da produção mecanizada e do sistema fabril.',
+'Revolução Francesa':'Processo revolucionário iniciado em 1789 na França.',
+'Primeira Guerra Mundial':'Conflito mundial ocorrido entre 1914 e 1918.',
+'Segunda Guerra Mundial':'Conflito mundial ocorrido entre 1939 e 1945.',
+'Guerra Fria':'Rivalidade global entre blocos liderados por EUA e União Soviética.'
+};
+function history(id,g,t){const d=HIST[t]||`Processo histórico relacionado a ${t}.`;return rec(id,g,'História',t,`Qual descrição resume melhor ${t}?`,d,d,'Associe contexto, causas e consequências.');}
+
+const GEO={
+'Cartografia':['O que é escala em um mapa?','Relação entre distância representada e distância real.'],
+'Urbanização':['O que é urbanização?','Crescimento da população urbana e expansão das cidades.'],
+'Migrações':['O que é migração?','Deslocamento de pessoas com mudança de residência.'],
+'Hidrografia':['O que é uma bacia hidrográfica?','Área drenada por um rio principal e seus afluentes.'],
+'Globalização':['O que é globalização?','Intensificação de fluxos econômicos, informacionais e culturais entre partes do mundo.'],
+'Clima':['Qual é a diferença entre tempo e clima?','Tempo descreve curto prazo; clima descreve padrões de longo prazo.']
+};
+function geography(id,g,t){
+ if(t.includes('População')){const pop=(mod(id,900,111)+100)*10000,area=(mod(id,800,113)+10)*100,den=pop/area;return rec(id,g,'Geografia',t,`Uma região tem ${pop} habitantes e ${area} km². Qual é a densidade demográfica?`,`${fmt(den)} hab/km²`,'Densidade=população/área.','Divida população pela área.')}
+ if(GEO[t]){const [q,a]=GEO[t];return rec(id,g,'Geografia',t,q,a,`Revisão de ${t}.`,'Associe o conceito à definição.')}
+ return rec(id,g,'Geografia',t,`Qual tópico geográfico está sendo revisado neste registro?`,t,`O tópico é ${t}.`,'Use o título do conteúdo.');
+}
+
+function english(id,g,t){
+ if(t==='Verb to be'){const [s,b]=pick([['I','am'],['you','are'],['we','are'],['they','are'],['he','is'],['she','is']],id,121);return rec(id,g,'Inglês',t,`Complete: ${s} ___ ready.`,b,`A forma correta é ${b}.`,'I am; he/she is; you/we/they are.')}
+ if(t==='Simple present'){const [s,v]=pick([['I','go'],['you','go'],['we','go'],['they','go'],['he','goes'],['she','goes']],id,127);return rec(id,g,'Inglês',t,`Complete: ${s} ___ to school every day.`,v,`A forma correta é ${v}.`,'Observe a terceira pessoa do singular.')}
+ if(t==='Simple past'){const [v,p]=pick([['go','went'],[
