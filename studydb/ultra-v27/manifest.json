@@ -1,0 +1,17 @@
+{
+  "version": "2.7.0",
+  "knowledgeVersion": "7.0",
+  "sourceBytes": 107683,
+  "gzipBytes": 28653,
+  "base64Bytes": 38204,
+  "parts": 5,
+  "partSize": 9000,
+  "sha256": "9d14f58f238994ae6a83934f0662b5591eca3349fbb7c9cb08349ed6c3e6d9be",
+  "fixes": [
+    "detecta select e combobox para questões de lacunas",
+    "mantém cada lacuna ligada à questão original",
+    "isola pares Certo/Errado em questões compostas",
+    "detecta resposta aberta mesmo antes de textarea/contenteditable existir",
+    "diagnóstico mostra dropdowns, pares C/E e cartões abertos"
+  ]
+}
