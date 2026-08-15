@@ -14,7 +14,7 @@ LLAMA_URL = os.getenv("CAPITRITUS_LLAMA_URL", "http://127.0.0.1:8081").rstrip("/
 API_TOKEN = os.getenv("CAPITRITUS_API_TOKEN", "").strip()
 MAX_TOKENS = int(os.getenv("CAPITRITUS_MAX_TOKENS", "220"))
 
-app = FastAPI(title="Capitritus AI", version="2.0.0")
+app = FastAPI(title="Capitritus AI", version="2.1.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -68,7 +68,8 @@ def _prompt(req: SolveRequest) -> list[dict]:
     system = (
         "/no_think\n"
         "Você é um tutor escolar conciso. Analise a questão com cuidado. "
-        "Para multiple_choice, true_false e fill_blank, indique a opção/termo mais defensável e explique em uma frase. "
+        "Para multiple_choice e true_false, escolha a opção mais defensável. "
+        "Para fill_blank, se houver opções use answer_index; se não houver opções, retorne o termo curto em answer. "
         "Para open_response, não escreva uma resposta final pronta para entregar; forneça somente 2 a 4 pistas conceituais. "
         "Retorne SOMENTE JSON válido, sem markdown."
     )
@@ -80,6 +81,7 @@ def _prompt(req: SolveRequest) -> list[dict]:
         "options": req.options,
         "output": {
             "answer_index": "inteiro começando em 0, ou null",
+            "answer": "termo curto apenas para fill_blank sem opções",
             "confidence": "número de 0 a 1",
             "explanation": "uma frase curta",
             "hints": ["somente para open_response"],
@@ -130,6 +132,11 @@ def _llama_health() -> bool:
             return 200 <= response.status < 300
     except Exception:
         return False
+
+
+@app.get("/")
+def root():
+    return {"name": "Capitritus AI", "ok": _llama_health(), "health": "/health", "solve": "/solve"}
 
 
 @app.get("/health")
