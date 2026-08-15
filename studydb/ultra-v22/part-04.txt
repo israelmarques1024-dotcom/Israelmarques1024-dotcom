@@ -1,0 +1,55 @@
+er(){
+  const sum=document.getElementById('dus-summary'),res=document.getElementById('dus-results');
+  if(!sum||!res)return;
+  const found=state.scan.filter(x=>x.status==='found').length,missing=state.scan.filter(x=>x.status==='missing').length;
+  sum.innerHTML=`Detectadas: <b>${state.scan.length}</b> • <span class="ok">com sugestão: ${found}</span> • <span class="dus-miss">sem resposta: ${missing}</span> • banco local: ${Object.keys(loadDB()).length}`;
+  res.innerHTML='';
+
+  if(!state.scan.length){
+    res.innerHTML='<div class="qcard dus-miss">Nenhuma questão com alternativas foi detectada nesta página.</div>';
+    return;
+  }
+
+  state.scan.forEach((e,qi)=>{
+    const c=document.createElement('div');c.className='qcard';
+    const answer=e.suggestion
+      ? `<div class="ans">Resposta sugerida: ${esc(e.suggestion.answer)} <span class="small">(${Math.round((e.suggestion.confidence||0)*100)}%)</span></div>`
+      : `<div class="dus-miss" style="margin-top:6px">Sem resposta encontrada.</div>`;
+    c.innerHTML=`
+      <div class="small">Questão ${qi+1} • ${esc(e.platform)}</div>
+      <div style="margin-top:5px;font-weight:650">${esc(e.question)}</div>
+      ${answer}
+      <div class="small" style="margin-top:4px">${esc(e.reason||'')}</div>
+      <div class="dus-options"></div>
+    `;
+    const opts=c.querySelector('.dus-options');
+    e.options.forEach((o,idx)=>{
+      const row=document.createElement('div');row.className='opt';
+      row.innerHTML=`<button type="button" data-save="${idx}">Salvar</button><div>${e.suggestion?.index===idx?'★ ':''}${esc(o.text)}</div>`;
+      opts.appendChild(row);
+    });
+    opts.querySelectorAll('[data-save]').forEach(b=>b.onclick=()=>saveAnswer(e,Number(b.dataset.save)));
+    res.appendChild(c);
+  });
+}
+
+function scheduleScan(){
+  clearTimeout(state.scanTimer);
+  state.scanTimer=setTimeout(()=>{if(settings().autoScan)analyzeAll()},1000);
+}
+function observe(){
+  if(state.observer)return;
+  state.observer=new MutationObserver(ms=>{
+    if(ms.some(m=>m.addedNodes?.length||m.removedNodes?.length))scheduleScan();
+  });
+  state.observer.observe(document.documentElement,{subtree:true,childList:true});
+}
+
+GM_registerMenuCommand('Doritus: ler página',analyzeAll);
+GM_registerMenuCommand('Doritus: exportar banco',exportDB);
+GM_registerMenuCommand('Doritus: limpar destaques',clearMarks);
+
+function init(){buildUI();observe();setTimeout(analyzeAll,1200)}
+if(document.body)init();else addEventListener('DOMContentLoaded',init,{once:true});
+
+})();
