@@ -7,6 +7,7 @@
 [![GitHub](https://img.shields.io/badge/GitHub-israelmarques1024--dotcom-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/israelmarques1024-dotcom)
 [![Karnel Termux](https://img.shields.io/badge/Karnel%20Termux-Website-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://karneltermux.vercel.app)
 [![Karnel NPM](https://img.shields.io/npm/v/karnel-termux?style=for-the-badge&logo=npm&label=karnel-termux)](https://www.npmjs.com/package/karnel-termux)
+[![YouTube — Capi.deb](https://img.shields.io/badge/YouTube-Capi.deb-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@capideb)
 
 **Construindo projetos reais, entendendo sistemas por dentro e transformando curiosidade em software.**
 
@@ -166,6 +167,7 @@ Arquitetura          ███████░░░  aprofundando
 <div align="center">
 
 [![GitHub Profile](https://img.shields.io/badge/GitHub-Perfil-181717?style=for-the-badge&logo=github)](https://github.com/israelmarques1024-dotcom)
+[![YouTube — Capi.deb](https://img.shields.io/badge/YouTube-Capi.deb-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@capideb)
 [![Karnel Website](https://img.shields.io/badge/Karnel%20Termux-Site-000000?style=for-the-badge&logo=vercel)](https://karneltermux.vercel.app)
 [![Karnel Repository](https://img.shields.io/badge/Karnel%20Termux-Repo-181717?style=for-the-badge&logo=github)](https://github.com/israelmarques1024-dotcom/karnel-termux)
 [![Nearbit](https://img.shields.io/badge/Nearbit-Repo-181717?style=for-the-badge&logo=github)](https://github.com/israelmarques1024-dotcom/nearbit)
